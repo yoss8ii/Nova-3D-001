@@ -1,213 +1,353 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <!-- Keep this page out of search engines -->
+
     <meta name="robots" content="noindex, nofollow">
     <title>NOVA 3D – Gestion de Boutique</title>
+
     <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/styles.css">
-    <!-- ADMIN-ONLY STYLES (everything else comes from /css/styles.css). .card = grey box, .g = responsive grid of fields, .th/.thumbs/.addph = photo thumbnails. -->
     <link rel="stylesheet" href="/css/admin.css">
+
+    <!-- Lucide: load before the admin scripts execute -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 </head>
 
 <body>
-    <!-- Container for the toast notifications (see toast() and ask() in the script below) -->
     <div id="toasts" aria-live="polite"></div>
 
-    <!-- LOGIN: a card centred in the middle of the screen. Submitting sends POST /api/catalog with the password; if accepted the
-         admin appears. With the factory password the second form (#fc) forces the choice of a real password first. -->
+    <!-- LOGIN -->
     <main id="login" class="lgx">
         <div class="lgc">
             <img class="lgl" src="/images/NOVA_3D_logo.svg" alt="NOVA 3D, administration">
+
             <h1>Administration</h1>
+
             <form id="lf">
                 <label for="pw">Mot de passe</label>
                 <input id="pw" type="password" autocomplete="current-password" autofocus>
                 <button class="pill" style="width:100%">Se connecter</button>
                 <p id="lm" class="note" role="alert"></p>
             </form>
+
             <form id="fc" class="hide">
                 <h2>Choisissez votre mot de passe</h2>
-                <p class="note" style="margin:6px 0 14px">Vous utilisez le mot de passe d'origine : il doit être remplacé avant d'aller plus loin.</p>
+                <p class="note" style="margin:6px 0 14px">
+                    Vous utilisez le mot de passe d'origine : il doit être remplacé avant d'aller plus loin.
+                </p>
+
                 <label for="fp1">Nouveau mot de passe (8 caractères minimum)</label>
                 <input id="fp1" type="password" autocomplete="new-password">
+
                 <label for="fp2">Confirmer le mot de passe</label>
                 <input id="fp2" type="password" autocomplete="new-password">
+
                 <button class="pill" style="width:100%">Enregistrer et continuer</button>
                 <p id="fm" class="note" role="alert"></p>
             </form>
         </div>
     </main>
 
-    <!-- THE ADMIN: hidden (class "hide") until login succeeds. Six tabs (buttons in #tabs, panels .tabp):
-         dash = dashboard (admin-dash.js), orders = order history + invoices (admin-orders.js), custom = "sur mesure" requests (admin-custom.js), promo = promo codes (admin-promo.js),
-         shop = categories + products (admin.js), set = password, delivery, reviews. -->
+    <!-- ADMIN APPLICATION -->
     <div class="wrap hide" id="app">
+
         <header style="position:static">
-            <div class="logo"><img src="/images/NOVA_3D_logo.svg" alt="NOVA 3D, administration"></div>
+            <div class="logo">
+                <img src="/images/NOVA_3D_logo.svg" alt="NOVA 3D, administration">
+            </div>
+
             <div class="hbtns">
-                <a id="shop" class="pill" href="/" target="_blank" rel="noopener" title="Ouvrir la boutique dans un nouvel onglet">Voir la boutique ↗</a>
-                <button type="button" id="logout" class="pill out" title="Fermer la session et revenir à l'écran de connexion">Se déconnecter</button>
+                <a id="shop" class="pill" href="/" target="_blank" rel="noopener"
+                   title="Ouvrir la boutique dans un nouvel onglet">
+                    Voir la boutique ↗
+                </a>
+
+                <button type="button" id="logout" class="pill out"
+                        title="Fermer la session et revenir à l'écran de connexion">
+                    Se déconnecter
+                </button>
             </div>
         </header>
-        <!-- A <div>, not <nav>: styles.css turns every <nav> into the phone side menu -->
+
+        <!-- NAVIGATION -->
         <div class="tabs" id="tabs" role="group" aria-label="Sections de l'administration">
-            <button type="button" data-tab="dash" aria-selected="true">Tableau de bord</button>
-            <button type="button" data-tab="orders" aria-selected="false">Commandes<b class="cnt hide" id="nbo"></b></button>
-            <button type="button" data-tab="custom" aria-selected="false">Sur mesure<b class="cnt hide" id="nbc"></b></button>
-            <button type="button" data-tab="promo" aria-selected="false">Codes promo</button>
-            <button type="button" data-tab="soon" aria-selected="false">Page d'attente<b class="cnt hide" id="nbs">Visible</b></button>
-            <button type="button" data-tab="shop" aria-selected="false">Boutique</button>
-            <button type="button" data-tab="set" aria-selected="false">Réglages</button>
+            <button type="button" data-tab="dash" aria-selected="true">
+                Tableau de bord
+            </button>
+
+            <button type="button" data-tab="orders" aria-selected="false">
+                Commandes<b class="cnt hide" id="nbo"></b>
+            </button>
+
+            <button type="button" data-tab="custom" aria-selected="false">
+                Sur mesure<b class="cnt hide" id="nbc"></b>
+            </button>
+
+            <button type="button" data-tab="promo" aria-selected="false">
+                Codes promo
+            </button>
+
+            <button type="button" data-tab="soon" aria-selected="false">
+                Page d'attente<b class="cnt hide" id="nbs">Visible</b>
+            </button>
+
+            <button type="button" data-tab="shop" aria-selected="false">
+                Boutique
+            </button>
+
+            <button type="button" data-tab="set" aria-selected="false">
+                Réglages
+            </button>
         </div>
 
-        <!-- TAB: DASHBOARD (filled by admin-dash.js) -->
+        <!-- DASHBOARD -->
         <section id="t-dash" class="tabp">
-            <div id="dash"><p class="note">Chargement…</p></div>
+            <div id="dash">
+                <p class="note">Chargement…</p>
+            </div>
         </section>
 
-        <!-- TAB: ORDERS (filled by admin-orders.js) -->
+        <!-- ORDERS -->
         <section id="t-orders" class="tabp hide">
             <div class="head">
-                <h2>Commandes</h2><button class="link" id="orf">Actualiser</button>
+                <h2>Commandes</h2>
+                <button class="link" id="orf">Actualiser</button>
             </div>
-            <!-- Saved invoice PDFs: stats + cleanup, and the "all orders" PDF export (admin-orders.js) -->
+
             <div class="card ocard">
                 <div>
-                    <b>Factures PDF enregistrées</b> <span class="note" id="pdfst" role="status"></span>
+                    <b>Factures PDF enregistrées</b>
+                    <span class="note" id="pdfst" role="status"></span>
+
                     <div class="oact" style="margin-top:10px">
                         <label for="pdfdays" style="margin:0">Supprimer celles de plus de</label>
+
                         <select id="pdfdays" aria-label="Ancienneté">
-                            <option value="30">30 jours</option><option value="90">90 jours</option><option value="180">6 mois</option><option value="365">1 an</option><option value="0">Toutes</option>
+                            <option value="30">30 jours</option>
+                            <option value="90">90 jours</option>
+                            <option value="180">6 mois</option>
+                            <option value="365">1 an</option>
+                            <option value="0">Toutes</option>
                         </select>
-                        <button type="button" class="pill out danger" id="pdfdel">Supprimer les anciens PDF</button>
+
+                        <button type="button" class="pill out danger" id="pdfdel">
+                            Supprimer les anciens PDF
+                        </button>
                     </div>
-                    <p class="note" style="margin:8px 0 0">Les commandes sont conservées : une facture supprimée est recréée à l'identique quand vous la téléchargez.</p>
+
+                    <p class="note" style="margin:8px 0 0">
+                        Les commandes sont conservées : une facture supprimée est recréée à l'identique quand vous la téléchargez.
+                    </p>
                 </div>
+
                 <hr style="border:0;border-top:1px solid var(--line);width:100%">
+
                 <div>
                     <b>Exporter les commandes</b>
+
                     <div class="oact" style="margin-top:10px">
-                        <label for="exf" style="margin:0">Du</label><input type="date" id="exf" aria-label="Date de début">
-                        <label for="ext" style="margin:0">au</label><input type="date" id="ext" aria-label="Date de fin">
-                        <button type="button" class="pill" id="exgo">Télécharger toutes les commandes (PDF)</button>
-                        <button type="button" class="pill out" id="excsv">Exporter en CSV</button>
+                        <label for="exf" style="margin:0">Du</label>
+                        <input type="date" id="exf" aria-label="Date de début">
+
+                        <label for="ext" style="margin:0">au</label>
+                        <input type="date" id="ext" aria-label="Date de fin">
+
+                        <button type="button" class="pill" id="exgo">
+                            Télécharger toutes les commandes (PDF)
+                        </button>
+
+                        <button type="button" class="pill out" id="excsv">
+                            Exporter en CSV
+                        </button>
                     </div>
-                    <p class="note" style="margin:8px 0 0">Sans dates : toutes les commandes passées, en un seul PDF.</p>
+
+                    <p class="note" style="margin:8px 0 0">
+                        Sans dates : toutes les commandes passées, en un seul PDF.
+                    </p>
                 </div>
             </div>
+
             <div class="card ofil">
-                <input id="osr" type="search" placeholder="Rechercher : nom, e-mail, téléphone ou n° de facture" aria-label="Rechercher une commande">
+                <input id="osr" type="search"
+                       placeholder="Rechercher : nom, e-mail, téléphone ou n° de facture"
+                       aria-label="Rechercher une commande">
+
                 <select id="ost" aria-label="Filtrer par statut">
                     <option value="">Toutes les commandes</option>
                     <option value="new">À préparer</option>
                     <option value="done">Traitées</option>
                 </select>
             </div>
-            <div class="tw" id="olist"><p class="note" style="padding:14px">Chargement…</p></div>
-            <p style="text-align:center;margin-top:14px"><button class="pill out hide" id="omore">Charger plus</button></p>
+
+            <div class="tw" id="olist">
+                <p class="note" style="padding:14px">Chargement…</p>
+            </div>
+
+            <p style="text-align:center;margin-top:14px">
+                <button class="pill out hide" id="omore">Charger plus</button>
+            </p>
         </section>
 
-        <!-- TAB: SUR MESURE = requests sent from the public "Sur mesure" form (admin-custom.js). Status: new -> quoted (price sent) -> done. -->
+        <!-- CUSTOM REQUESTS -->
         <section id="t-custom" class="tabp hide">
             <div class="head">
-                <h2>Demandes sur mesure</h2><button class="link" id="crf">Actualiser</button>
+                <h2>Demandes sur mesure</h2>
+                <button class="link" id="crf">Actualiser</button>
             </div>
-            <div id="crlist"><p class="note" style="padding:14px">Chargement…</p></div>
+
+            <div id="crlist">
+                <p class="note" style="padding:14px">Chargement…</p>
+            </div>
         </section>
 
-        <!-- TAB: CODES PROMO = codes the visitors can type in the cart. Each code takes its own percentage off the products (admin-promo.js). -->
+        <!-- PROMO CODES -->
         <section id="t-promo" class="tabp hide">
             <div class="head">
-                <h2>Codes promo</h2><button class="link" id="prf">Actualiser</button>
+                <h2>Codes promo</h2>
+                <button class="link" id="prf">Actualiser</button>
             </div>
+
             <form class="card promof" id="prform">
-                <div><label for="prc">Code</label><input id="prc" maxlength="20" autocomplete="off" placeholder="ETE10" style="text-transform:uppercase"></div>
-                <div><label for="prp">Réduction (%)</label><input id="prp" type="number" min="0.01" max="100" step="0.01" inputmode="decimal" placeholder="10"></div>
+                <div>
+                    <label for="prc">Code</label>
+                    <input id="prc" maxlength="20" autocomplete="off"
+                           placeholder="ETE10" style="text-transform:uppercase">
+                </div>
+
+                <div>
+                    <label for="prp">Réduction (%)</label>
+                    <input id="prp" type="number" min="0.01" max="100"
+                           step="0.01" inputmode="decimal" placeholder="10">
+                </div>
+
                 <button class="pill">Enregistrer</button>
             </form>
-            <p class="note" style="margin:0 0 12px">La réduction s'applique au prix des produits, pas à la livraison. Un code existant voit son pourcentage mis à jour. Lettres, chiffres, - et _ (3 à 20 caractères).</p>
-            <div id="prlist"><p class="note" style="padding:14px">Chargement…</p></div>
+
+            <p class="note" style="margin:0 0 12px">
+                La réduction s'applique au prix des produits, pas à la livraison.
+                Un code existant voit son pourcentage mis à jour.
+                Lettres, chiffres, - et _ (3 à 20 caractères).
+            </p>
+
+            <div id="prlist">
+                <p class="note" style="padding:14px">Chargement…</p>
+            </div>
         </section>
 
-        <!-- TAB: PAGE D'ATTENTE = the "Bientôt disponible" page shown to every visitor while it is ON. Texts (FR + AR), contact links, ON/OFF switch.
-             Saved in KV, not in the database (admin-soon.js, GET/PUT /api/coming-soon). The admin page itself is never hidden by it. -->
+        <!-- COMING SOON -->
         <section id="t-soon" class="tabp hide">
             <div class="head">
-                <h2>Page d'attente</h2><a class="link" href="/bientot/" target="_blank" rel="noopener">Voir la page ↗</a>
+                <h2>Page d'attente</h2>
+                <a class="link" href="/bientot/" target="_blank" rel="noopener">
+                    Voir la page ↗
+                </a>
             </div>
+
             <div class="card" id="soonstate"></div>
             <div class="card" id="soonbox"></div>
         </section>
 
-        <!-- TAB: SHOP = categories + products. "Modifier" opens a row for editing; "Enregistrer" saves that row only (a loader shows on it until the screen is refreshed from the database). -->
+        <!-- SHOP -->
         <section id="t-shop" class="tabp hide">
             <div class="head">
-                <h2>Catégories</h2><button class="link" id="addc">Ajouter une catégorie</button>
+                <h2>Catégories</h2>
+                <button class="link" id="addc">Ajouter une catégorie</button>
             </div>
+
             <div class="tw" id="cats"></div>
+
             <div class="head" style="margin-top:26px">
-                <h2>Produits</h2><button class="link" id="add">Ajouter un produit</button>
+                <h2>Produits</h2>
+                <button class="link" id="add">Ajouter un produit</button>
             </div>
+
             <div class="tw" id="list"></div>
         </section>
 
-        <!-- TAB: SETTINGS = password, delivery fee, review screenshots -->
+        <!-- SETTINGS -->
         <section id="t-set" class="tabp hide">
+
             <div class="head">
                 <h2>Mot de passe</h2>
             </div>
-            <div class="card"><label for="np">Nouveau mot de passe (8 caractères minimum)</label><input id="np"
-                    type="password" autocomplete="new-password"><button class="pill" id="chpw">Changer le mot de
-                    passe</button> <span class="note" id="pm" role="status"></span></div>
+
+            <div class="card">
+                <label for="np">Nouveau mot de passe (8 caractères minimum)</label>
+                <input id="np" type="password" autocomplete="new-password">
+                <button class="pill" id="chpw">Changer le mot de passe</button>
+                <span class="note" id="pm" role="status"></span>
+            </div>
+
             <div class="head" style="margin-top:26px">
                 <h2>Livraison</h2>
             </div>
-            <div class="card"><label for="dv">Frais de livraison par commande (0 = livraison gratuite)</label><input id="dv" type="number" min="0" step="0.5" value="0" disabled>
-                <div class="dvact" id="dvact"></div></div>
-            <!-- SUCCESS PANEL of the home page: "Modifier" / "Enregistrer" like the other zones (zone key "ach" in admin.js). Drawn by drawAch(). -->
+
+            <div class="card">
+                <label for="dv">Frais de livraison par commande (0 = livraison gratuite)</label>
+                <input id="dv" type="number" min="0" step="0.5" value="0" disabled>
+                <div class="dvact" id="dvact"></div>
+            </div>
+
+            <!-- ACHIEVEMENTS -->
             <div class="head" style="margin-top:26px">
                 <h2>Panneau de réussites</h2>
             </div>
+
             <div class="card" id="achcard">
                 <div id="achbox"></div>
                 <div class="dvact" id="achact"></div>
             </div>
-            <!-- REVIEWS: screenshots shown as animated cards on the home page. Saved immediately. Drawn by admin-reviews.js. -->
+
+            <!-- CUSTOMER REVIEWS -->
             <div class="head" style="margin-top:26px">
                 <h2>Avis clients</h2>
-                <label class="link" for="rup" style="margin:0;cursor:pointer">Ajouter des captures</label>
+
+                <label class="link" for="rup" style="margin:0;cursor:pointer">
+                    Ajouter des captures
+                </label>
+
                 <input type="file" id="rup" accept="image/*" multiple hidden>
             </div>
+
             <div class="card">
-                <p class="note" style="margin:0 0 12px">Captures d'écran d'avis (WhatsApp, Facebook, Instagram…). Elles défilent en cartes animées sur la page d'accueil. Enregistrement immédiat.</p>
+                <p class="note" style="margin:0 0 12px">
+                    Captures d'écran d'avis (WhatsApp, Facebook, Instagram…).
+                    Elles défilent en cartes animées sur la page d'accueil.
+                    Enregistrement immédiat.
+                </p>
+
                 <div class="thumbs" id="rlist"></div>
                 <span class="note" id="rm" role="status"></span>
             </div>
-            <!-- FEEDBACK: star ratings + comments left by visitors on the home page. Deleted at once. Drawn by admin-reviews.js. -->
+
+            <!-- FEEDBACK -->
             <div class="head" style="margin-top:26px">
                 <h2>Notes et commentaires</h2>
                 <span class="note" id="fbsum"></span>
             </div>
+
             <div class="card">
-                <p class="note" style="margin:0 0 12px">Notes de 1 à 5 étoiles laissées par les visiteurs. Supprimez ici un commentaire abusif.</p>
+                <p class="note" style="margin:0 0 12px">
+                    Notes de 1 à 5 étoiles laissées par les visiteurs.
+                    Supprimez ici un commentaire abusif.
+                </p>
+
                 <div id="fblist"></div>
             </div>
         </section>
 
     </div>
 
-    <!-- ADMIN LOGIC (separate files in /js, loaded in this order).
-         admin-ui.js = toasts and helpers. admin.js = login, tabs and the catalogue editor: C / L / DV hold what the database holds, a row opened with
-         "Modifier" works on a draft, and "Enregistrer" sends that one change (PUT /api/catalog), re-reads the catalogue and redraws without reloading the page.
-         Photos, review screenshots, the password and order statuses are saved at once by their own buttons.
-         admin-reviews.js = review screenshots. admin-orders.js = order history + invoice download. admin-dash.js = dashboard. -->
+    <!-- ADMIN SCRIPTS: defer preserves execution order -->
     <script src="/js/admin-ui.js" defer></script>
     <script src="/js/admin.js" defer></script>
     <script src="/js/admin-reviews.js" defer></script>
@@ -216,7 +356,6 @@
     <script src="/js/admin-custom.js" defer></script>
     <script src="/js/admin-promo.js" defer></script>
     <script src="/js/admin-soon.js" defer></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-</body>
 
+</body>
 </html>
