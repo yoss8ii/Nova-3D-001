@@ -40,7 +40,8 @@
         --grid: #0000000d;
         color-scheme: light
     }
-    
+
+
     /* Dark mode, applied automatically when the visitor's device is in dark mode
        (unless <html data-theme="light"> forces light). Keep the next block identical. */
     
