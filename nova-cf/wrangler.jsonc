@@ -27,8 +27,4 @@
     "TIMEZONE": "Africa/Tunis",
     "OWNER_EMAIL": "nova.3d.com.tn@gmail.com"
   }
-
-  "observability": {
-      "enabled": false
-  },
 }
