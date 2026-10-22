@@ -1,6 +1,17 @@
 /* NOVA 3D - public/css/admin.css
  * Styles used ONLY by the admin page (the shared ones are in styles.css). */
 
+
+.soon-icon {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+    vertical-align: -4px;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
 .card {
     background: var(--tile);
     border-radius: 22px;
