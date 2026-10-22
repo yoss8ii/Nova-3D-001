@@ -2,15 +2,42 @@
  * Styles used ONLY by the admin page (the shared ones are in styles.css). */
 
 
+
+/* NOVA — Coming-soon status and native SVG icons */
+.soon-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text, inherit);
+}
+
 .soon-icon {
-    display: inline-block;
+    display: block;
     width: 22px;
     height: 22px;
-    margin-right: 6px;
-    vertical-align: -4px;
-    stroke-width: 2;
-    flex-shrink: 0;
+    flex: 0 0 22px;
+    margin-top: 3px;
+    color: inherit;
+    stroke: currentColor;
 }
+
+@media (max-width: 600px) {
+    .soon-status {
+        font-size: 16px;
+        gap: 9px;
+    }
+
+    .soon-icon {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
+    }
+}
+
 
 .card {
     background: var(--tile);
