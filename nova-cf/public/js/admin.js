@@ -25,7 +25,7 @@ function saved() { try { return sessionStorage.getItem(SKEY) || "" } catch (e) {
 function call(m, path, b) { return fetch(path, { method: m, headers: { "content-type": "application/json", "x-admin-password": encodeURIComponent(pw) }, body: b ? JSON.stringify(b) : undefined }) }
 // Calls /api/catalog with the given method (POST login/password, PUT save) and the password header
 function api(m, b) { return call(m, "/api/catalog", b) }
-// Shows one tab (dash | orders | custom | promo | shop | set)
+// Shows one tab (dash | orders | custom | promo | soon | shop | set)
 var TAB = "dash";
 function showTab(n) {
     TAB = n;
@@ -34,7 +34,8 @@ function showTab(n) {
     if (n === "dash" && window.loadDash) loadDash();
     if (n === "orders" && window.loadOrders) loadOrders(true);
     if (n === "custom" && window.loadCustom) loadCustom();
-    if (n === "promo" && window.loadPromos) loadPromos()
+    if (n === "promo" && window.loadPromos) loadPromos();
+    if (n === "soon" && window.loadSoon) loadSoon()
 }
 
 /* ---- Small helpers ---- */
@@ -335,7 +336,7 @@ function shrink(file, max, q) { return new Promise(function (res, rej) { var im 
 function load() {
     fetchCatalog().then(function () {
         remember(); $("login").classList.add("hide"); $("app").classList.remove("hide");
-        var t = (location.hash || "").slice(1); showTab(["dash", "orders", "custom", "promo", "shop", "set"].indexOf(t) > -1 ? t : "dash"); if (window.loadCustom && TAB !== "custom") loadCustom(true); loadAdminReviews(); loadAdminFeedback(); fetchAch().catch(function () { })
+        var t = (location.hash || "").slice(1); showTab(["dash", "orders", "custom", "promo", "soon", "shop", "set"].indexOf(t) > -1 ? t : "dash"); if (window.loadCustom && TAB !== "custom") loadCustom(true); loadAdminReviews(); loadAdminFeedback(); fetchAch().catch(function () { }); if (window.loadSoon) loadSoon(true)
     }).catch(function () { $("lm").textContent = "Base de données indisponible."; toast("Base de données indisponible.", "err") })
 }
 // Tabs

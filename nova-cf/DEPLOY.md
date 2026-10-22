@@ -225,3 +225,15 @@ If an e-mail fails, the admin "Commandes" tab shows **Non envoyée** with a **Re
 * In the cart, each line shows **Couleur : Identique à la photo** (default). *Choisir* opens 16 swatches and a colour picker for any other colour; the choice is optional and kept in the browser (`n3d_cart_colors`).
 * The chosen colour is saved on the order line (`c` = hex, `cn` = closest French name, e.g. "Rouge (#d33322)", no migration needed) and printed on the invoice PDF, the e-mails, the admin order history (colour dot + details) and the "all orders" PDF.
 * One colour per cart line (all the units of that product). To change the swatches, edit `PALETTE` in **both** `public/js/core.js` and `src/core/colors.ts`.
+
+## Page « Bientôt disponible » (page d'attente)
+
+While it is ON, every public page (home, shop, product, cart, about, tracking, custom order) shows `/bientot/` instead of the site (answer 503 + `Retry-After`, so Google keeps your pages). The admin page and the API stay reachable. Texts (FR + AR), Instagram, WhatsApp and the ON/OFF switch are edited in the admin, tab **Page d'attente**. They are saved in Cloudflare **KV**, not in Postgres.
+
+One-time setup:
+1. `npx wrangler kv namespace create NOVA_KV`
+2. Copy the printed `id` into `wrangler.jsonc`: remove the `//` in front of the `"kv_namespaces"` line and replace `PASTE_THE_ID_HERE`.
+3. `npm run deploy`
+
+From then on the page is **ON** (default texts) until you untick « Afficher la page » in the admin and save. A change is live in under a minute.
+Without steps 1-2 the feature is simply off (the site stays open) and the admin tab says so.

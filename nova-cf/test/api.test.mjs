@@ -707,3 +707,43 @@ test("push notification: ntfy + Telegram get the new order (no e-mail / phone / 
   const { call } = await setup({ ordersEnabled: true })               // nothing configured: no call, order fine
   assert.equal((await order(call, 1)).status, 200)
 })
+
+// ---- "Bientôt disponible" page (stored in a key-value store, not in the database) ----
+const fakeKv = () => { const m = new Map(); return { m, get: async (k) => m.get(k) ?? null, put: async (k, v) => { m.set(k, v) } } }
+
+test("coming soon: without a key-value store the page is off and cannot be saved", async () => {
+  const { call } = await setup()
+  const d = await (await call("GET", "/api/coming-soon")).json()
+  assert.equal(d.available, false); assert.equal(d.on, false)
+  assert.equal((await call("PUT", "/api/coming-soon", { body: { on: true }, pw: PW })).status, 501)
+})
+
+test("coming soon: ON by default, shop contacts as fallback, only the admin can save", async () => {
+  const kv = fakeKv()
+  const { call } = await setup({ settingsKv: kv, siteContacts: async () => ({ phone: "216 26-183-165", instagram: "https://www.instagram.com/nova_tn_3d" }) })
+  const d = await (await call("GET", "/api/coming-soon")).json()
+  assert.equal(d.available, true); assert.equal(d.on, true)
+  assert.equal(d.whatsapp, "21626183165"); assert.equal(d.instagram, "https://www.instagram.com/nova_tn_3d")
+  assert.match(d.titleFr, /Bientôt/); assert.ok(d.textAr.length > 10)
+  const body = { on: false, titleFr: " Ouverture  bientôt ", textFr: "Texte", titleAr: "", textAr: "", instagram: "@nova.3d", whatsapp: "+216 22 333 444" }
+  assert.equal((await call("PUT", "/api/coming-soon", { body })).status, 401)          // no password
+  assert.equal(kv.m.size, 0)
+  const r = await call("PUT", "/api/coming-soon", { body, pw: PW }); assert.equal(r.status, 200)
+  const s = await (await call("GET", "/api/coming-soon?fresh=1")).json()
+  assert.equal(s.on, false); assert.equal(s.titleFr, "Ouverture bientôt")
+  assert.equal(s.instagram, "https://www.instagram.com/nova.3d"); assert.equal(s.whatsapp, "21622333444")
+  assert.match(s.titleAr, /قريب/)                                                      // an empty title falls back to the default
+})
+
+test("coming soon: bad data is refused (400, field named); an empty contact falls back to the shop contact", async () => {
+  const kv = fakeKv()
+  const { call } = await setup({ settingsKv: kv, siteContacts: async () => ({ phone: "21626183165" }) })
+  const ok = { on: true, titleFr: "a", textFr: "b", titleAr: "c", textAr: "d", instagram: "", whatsapp: "" }
+  for (const [bad, field] of [[{ ...ok, instagram: "https://evil.example/x" }, "instagram"], [{ ...ok, instagram: "javascript:alert(1)" }, "instagram"],
+    [{ ...ok, whatsapp: "12ab" }, "whatsapp"], [{ ...ok, on: "yes" }, "on"]]) {
+    const r = await call("PUT", "/api/coming-soon", { body: bad, pw: PW }); assert.equal(r.status, 400); assert.equal((await r.json()).field, field)
+  }
+  assert.equal((await call("PUT", "/api/coming-soon", { body: ok, pw: PW })).status, 200)
+  const d = await (await call("GET", "/api/coming-soon")).json()
+  assert.equal(d.whatsapp, "21626183165"); assert.equal(d.instagram, "")
+})

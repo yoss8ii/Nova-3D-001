@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>NOVA 3D – Bientôt disponible | قريبًا</title>
+    <!-- Nobody should find this page in Google: the real site comes back when the page is switched off in the admin. -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="NOVA 3D – notre site de design 3D arrive bientôt.">
+    <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/images/icon-180.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Applies the light/dark choice the visitor saved on the shop (no flash). Same file as the rest of the site. -->
+    <script src="/js/theme.js"></script>
+    <link rel="stylesheet" href="/css/soon.css">
+</head>
+
+<body>
+    <!-- Soft blurred shapes that drift slowly (pure CSS, see css/soon.css). Decoration only. -->
+    <div class="bg" aria-hidden="true"><i class="b b1"></i><i class="b b2"></i><i class="b b3"></i><i class="b b4"></i></div>
+
+    <main class="stage">
+        <a class="logo" href="/bientot/" aria-label="NOVA 3D"><img src="/images/NOVA_3D_logo.svg" alt="NOVA 3D" width="865" height="324"></a>
+
+        <!-- The texts below are the DEFAULT ones: js/soon.js replaces them with what the owner wrote in the admin ("Page d'attente" tab). -->
+        <section class="msg" lang="fr">
+            <h1 id="sTitleFr">Bientôt disponible</h1>
+            <p id="sTextFr">Nous créons notre site de design 3D : porte-clés, gadgets et objets personnalisés imprimés en 3D. Un peu de patience, ça arrive !</p>
+        </section>
+
+        <div class="sep" aria-hidden="true"><span></span></div>
+
+        <section class="msg ar" lang="ar" dir="rtl">
+            <h2 id="sTitleAr">قريبًا</h2>
+            <p id="sTextAr">نحضّرو في موقعنا متاع تصميم ثلاثي الأبعاد: porte-clés وgadgets وأشياء مخصّصة مطبوعة بالـ3D. شوية صبر، قريب نكونو معاكم!</p>
+        </section>
+
+        <!-- Contact buttons. The links below work even without JavaScript; js/soon.js updates them with the admin values. -->
+        <nav class="btns" aria-label="Contact · تواصل معنا">
+            <a class="btn wa" id="sWa" href="https://wa.me/21626183165" target="_blank" rel="noopener" aria-label="WhatsApp · واتساب">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path fill="currentColor" d="M9 8.8c.2-.5.7-.5 1-.1l.8 1.2c.2.3.1.6-.1.9l-.4.5c.5 1 1.3 1.8 2.3 2.4l.6-.5c.3-.2.6-.2.9 0l1.2.8c.4.3.4.7 0 1-.7.7-1.7 1-2.7.6-2.4-1-4.1-2.7-4.8-4.8-.2-.6 0-1.1.4-1.5z"/></svg>
+                <span>WhatsApp</span>
+            </a>
+            <a class="btn ig" id="sIg" href="https://www.instagram.com/nova_tn_3d" target="_blank" rel="noopener" aria-label="Instagram · إنستغرام">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>
+                <span>Instagram</span>
+            </a>
+        </nav>
+    </main>
+
+    <script src="/js/soon.js" defer></script>
+</body>
+
+</html>

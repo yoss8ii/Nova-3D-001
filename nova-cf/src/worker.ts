@@ -14,15 +14,18 @@
  *   GMAIL_SCRIPT_URL + GMAIL_SCRIPT_SECRET (free, sent from your Gmail), or BREVO_API_KEY (free, no domain needed) or RESEND_API_KEY (needs your own domain), + MAIL_FROM   optional secrets for the order e-mail
  *   OWNER_EMAIL     optional: receives a short "Nouvelle commande à préparer" e-mail for every order
  *   NTFY_TOPIC / NTFY_SERVER, TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID   optional: instant phone notification for every order (see core/notify.ts)
+ *   NOVA_KV         optional Cloudflare KV namespace: holds the "Bientôt disponible" page (texts + ON/OFF). Without it the feature is off and the site is always open.
  *   TIMEZONE        optional, default "Africa/Tunis": the shop time zone used by the dashboard (days / months)
  */
 import { createApp } from "./app.ts"
 import { postgresRepo } from "./repo/postgres.ts"
+import { readSoon, SOON_KEY } from "./core/coming-soon.ts"
 import { decodePngLogo, type InvoiceLogo } from "./core/pdf.ts"
 
 interface Env {
   ASSETS: { fetch(req: Request | string | URL): Promise<Response> }
   HYPERDRIVE: { connectionString: string }
+  NOVA_KV?: { get(key: string, opts?: { cacheTtl?: number }): Promise<string | null>; put(key: string, value: string): Promise<void> }
   ADMIN_PASSWORD?: string
   ORDERS_ENABLED?: string
   RESEND_API_KEY?: string
@@ -45,10 +48,30 @@ async function loadLogo(env: Env, r: Request) {
   return decodePngLogo(new Uint8Array(await response.arrayBuffer()))
 }
 
+// "Bientôt disponible" gate. The public pages (home, shop, cart...) answer with /bientot/ while the page is ON in the admin.
+// Not gated: /api/*, the admin page, scripts, styles, images, robots.txt, sitemap.xml and the Google verification file.
+// 503 + Retry-After = what Google recommends for a site that is temporarily closed (nothing is removed from the search results).
+// Fail-safe: no KV binding, or KV unreadable -> the site simply stays open.
+const GATED_PAGES = ["/", "/produits", "/produit", "/panier", "/a-propos", "/suivi", "/sur-mesure"]
+async function comingSoonGate(req: Request, env: Env): Promise<Response | null> {
+  if (!env.NOVA_KV || (req.method !== "GET" && req.method !== "HEAD")) return null
+  const url = new URL(req.url)
+  const page = url.pathname.replace(/\/index\.html$/, "/").replace(/(.)\/+$/, "$1")
+  if (!GATED_PAGES.includes(page)) return null
+  let raw: string | null
+  try { raw = await env.NOVA_KV.get(SOON_KEY, { cacheTtl: 30 }) } catch { return null }   // cacheTtl 30 s = the minimum KV allows: a change is live within about a minute
+  if (!readSoon(raw).on) return null
+  const res = await env.ASSETS.fetch(new URL("/bientot/", url))
+  if (!res.ok) return null
+  const headers = new Headers(res.headers)
+  headers.set("retry-after", "3600"); headers.set("cache-control", "no-store"); headers.set("x-robots-tag", "noindex")
+  return new Response(req.method === "HEAD" ? null : res.body, { status: 503, headers })
+}
+
 export default {
   async fetch(req: Request, env: Env, ctx: { waitUntil(p: Promise<unknown>): void }): Promise<Response> {
-    // Not an API call: serve the website (normally wrangler already does this without running the Worker)
-    if (!new URL(req.url).pathname.startsWith("/api/")) return env.ASSETS.fetch(req)
+    // Not an API call: the "coming soon" page when it is ON, else the website (static files of public/)
+    if (!new URL(req.url).pathname.startsWith("/api/")) return (await comingSoonGate(req, env)) ?? env.ASSETS.fetch(req)
 
     const app = createApp({
       repo: () => postgresRepo(env.HYPERDRIVE.connectionString),
@@ -75,6 +98,7 @@ export default {
         try { const j: any = await (await env.ASSETS.fetch(new URL("/data/site.json", r.url))).json(); return { phone: j.phone, facebook: j.facebook, instagram: j.instagram } }
         catch { return {} }
       },
+      settingsKv: env.NOVA_KV ? { get: (k) => env.NOVA_KV!.get(k), put: (k, v) => env.NOVA_KV!.put(k, v) } : undefined,
       defer: (p) => ctx.waitUntil(p),
     })
     return app(req)

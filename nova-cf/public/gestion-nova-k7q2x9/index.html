@@ -62,6 +62,7 @@
             <button type="button" data-tab="orders" aria-selected="false">Commandes<b class="cnt hide" id="nbo"></b></button>
             <button type="button" data-tab="custom" aria-selected="false">Sur mesure<b class="cnt hide" id="nbc"></b></button>
             <button type="button" data-tab="promo" aria-selected="false">Codes promo</button>
+            <button type="button" data-tab="soon" aria-selected="false">Page d'attente<b class="cnt hide" id="nbs">ON</b></button>
             <button type="button" data-tab="shop" aria-selected="false">Boutique</button>
             <button type="button" data-tab="set" aria-selected="false">Réglages</button>
         </div>
@@ -135,6 +136,16 @@
             <div id="prlist"><p class="note" style="padding:14px">Chargement…</p></div>
         </section>
 
+        <!-- TAB: PAGE D'ATTENTE = the "Bientôt disponible" page shown to every visitor while it is ON. Texts (FR + AR), contact links, ON/OFF switch.
+             Saved in KV, not in the database (admin-soon.js, GET/PUT /api/coming-soon). The admin page itself is never hidden by it. -->
+        <section id="t-soon" class="tabp hide">
+            <div class="head">
+                <h2>Page d'attente</h2><a class="link" href="/bientot/" target="_blank" rel="noopener">Voir la page ↗</a>
+            </div>
+            <div class="card" id="soonstate"></div>
+            <div class="card" id="soonbox"></div>
+        </section>
+
         <!-- TAB: SHOP = categories + products. "Modifier" opens a row for editing; "Enregistrer" saves that row only (a loader shows on it until the screen is refreshed from the database). -->
         <section id="t-shop" class="tabp hide">
             <div class="head">
@@ -204,6 +215,7 @@
     <script src="/js/admin-dash.js" defer></script>
     <script src="/js/admin-custom.js" defer></script>
     <script src="/js/admin-promo.js" defer></script>
+    <script src="/js/admin-soon.js" defer></script>
 </body>
 
 </html>

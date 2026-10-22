@@ -28,6 +28,8 @@
  *   POST /api/track        public   { no, phone } order tracking by invoice number + phone -> status and lines (nothing personal)
  *   GET  /api/achievements public   success panel: { on, title, sub, cards, stats: [{k, l, n}] }; each n is a BRACKET (99, 250...), never an exact count
  *   PUT  /api/achievements admin    { on, title, sub, cards: [{t, d}] } texts of the success panel
+ *   GET  /api/coming-soon  public   the "Bientôt disponible" page: { on, titleFr, textFr, titleAr, textAr, instagram, whatsapp, available } (no database)
+ *   PUT  /api/coming-soon  admin    { on, titleFr, textFr, titleAr, textAr, instagram, whatsapp } (501 when the key-value store is not set up)
  *   GET  /api/orders?limit=&offset=   admin   order history { orders, total }
  *   GET  /api/orders/:no/pdf          admin   the saved invoice PDF of an order
  *   PATCH /api/orders/:no             admin   { status: "new" | "done" }
@@ -54,6 +56,7 @@ import { handleFeedback } from "./core/feedback.ts"
 import { handleCustom, CUSTOM_STATUSES } from "./core/custom.ts"
 import { handleTrack } from "./core/track.ts"
 import { handlePromoCheck, handlePromoAdmin } from "./core/promo.ts"
+import { cleanSoon, readSoon, SOON_KEY } from "./core/coming-soon.ts"
 import type { MailConfig } from "./core/mail.ts"
 import type { PushConfig } from "./core/notify.ts"
 
@@ -67,6 +70,7 @@ export interface AppDeps {
   timezone?: string                                  // shop time zone for the dashboard days (default Africa/Tunis)
   defer?: (p: Promise<unknown>) => void              // ctx.waitUntil on Workers (optional)
   invoiceLogo?: (req: Request) => Promise<InvoiceLogo | undefined> // decoded NOVA logo (small PNG, cached)
+  settingsKv?: { get(key: string): Promise<string | null>; put(key: string, value: string): Promise<void> } // key-value store for the "coming soon" page (Cloudflare KV); absent = feature off
   siteContacts?: (req: Request) => Promise<{ phone?: string; facebook?: string; instagram?: string }> // from public/data/site.json
 }
 
@@ -91,6 +95,7 @@ export function createApp(deps: AppDeps) {
       if (path === "/api/order") return await handleOrder(req, db(), deps)
       if (path === "/api/orders" || path.startsWith("/api/orders/")) return await ordersRoute(req, path, db(), deps)
       if (path === "/api/dashboard") return await dashboardRoute(req, db(), deps)
+      if (path === "/api/coming-soon") return await comingSoonRoute(req, deps, db)
       if (path === "/api/achievements") return await achievementsRoute(req, db(), deps)
       return json({ error: "Not found" }, 404)
     } catch (e) {
@@ -237,6 +242,29 @@ async function achievementsRoute(req: Request, repo: Repo, deps: AppDeps) {
     const cfg = cleanAch(body)
     if (!cfg) return json({ error: "Invalid data" }, 400)
     await repo.setSetting("achievements", JSON.stringify(cfg))
+    return json(cfg)
+  }
+  return json({ error: "Method not allowed" }, 405)
+}
+
+// "Bientôt disponible" page: stored in the key-value store, NOT in the database (the database is only opened to check the admin password on PUT)
+async function comingSoonRoute(req: Request, deps: AppDeps, db: () => Repo) {
+  const kv = deps.settingsKv
+  if (req.method === "GET") {
+    const cfg = kv ? readSoon(await kv.get(SOON_KEY).catch(() => null)) : { ...readSoon(null), on: false }
+    const sc = deps.siteContacts ? await deps.siteContacts(req).catch(() => ({} as { phone?: string; instagram?: string })) : {}
+    // Empty contact fields fall back to the shop contacts of public/data/site.json
+    const out = { ...cfg, instagram: cfg.instagram || sc.instagram || "", whatsapp: cfg.whatsapp || String(sc.phone || "").replace(/\D/g, ""), available: !!kv }
+    return json(out, 200, new URL(req.url).searchParams.has("fresh") ? {} : { "cache-control": "public, max-age=30" })
+  }
+  if (req.method === "PUT") {
+    const g = await guard(req, db(), deps); if (g.res) return g.res
+    if (!kv) return json({ error: "storage_unavailable" }, 501)
+    const raw = await req.text()
+    let body: unknown = null; try { body = raw.length < 10_000 ? JSON.parse(raw) : null } catch { /* invalid JSON */ }
+    const cfg = cleanSoon(body)
+    if ("bad" in cfg) return json({ error: "Invalid data", field: cfg.bad }, 400)
+    await kv.put(SOON_KEY, JSON.stringify(cfg))
     return json(cfg)
   }
   return json({ error: "Method not allowed" }, 405)
