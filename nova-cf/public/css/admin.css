@@ -1,0 +1,366 @@
+/* NOVA 3D - public/css/admin.css
+ * Styles used ONLY by the admin page (the shared ones are in styles.css). */
+
+.card {
+    background: var(--tile);
+    border-radius: 22px;
+    padding: 18px;
+    margin-bottom: 14px
+}
+
+.g {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0 12px
+}
+
+select {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 13px 14px;
+    font: 16px Urbanist, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    margin-bottom: 12px
+}
+
+input[type=color] {
+    padding: 4px;
+    height: 50px
+}
+
+input[type=checkbox] {
+    width: auto;
+    margin: 0 8px 0 0
+}
+
+.ck {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    margin-bottom: 12px
+}
+
+button.del {
+    background: none;
+    border: 0;
+    color: #d33;
+    font: 700 14px Urbanist, sans-serif;
+    cursor: pointer;
+    padding: 0
+}
+
+.crow {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+.crow input {
+    margin: 0 0 10px
+}
+
+.thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px
+}
+
+.th {
+    position: relative;
+    width: 76px;
+    height: 76px
+}
+
+.th img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px
+}
+
+.th button {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 0;
+    background: #d33;
+    color: #fff;
+    cursor: pointer
+}
+
+.addph {
+    width: 76px;
+    height: 76px;
+    border: 2px dashed var(--line);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0
+}
+
+details {
+    margin-bottom: 12px
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 700;
+    margin-bottom: 10px
+}
+
+/* Review screenshots: bigger thumbnails than product photos (portrait, text must be readable) */
+
+.rth {
+    width: 96px;
+    height: 150px
+}
+
+.rth img {
+    object-fit: contain;
+    background: var(--tile)
+}
+
+
+/* ---- Tables (products, categories) ---- */
+.tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--bg) }
+.tb { width: 100%; border-collapse: collapse; min-width: 900px }
+.tb.tbs { min-width: 0 }
+.tb th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; color: var(--mut); background: var(--tile); padding: 11px 10px; white-space: nowrap; position: sticky; top: 0 }
+.tb td { padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: middle }
+.tb tbody tr.pr, .tb tbody tr:not(.mr) { transition: background .15s }
+.tb tbody tr:not(.mr):hover { background: var(--tile) }
+.tb input, .tb select, .tb textarea { margin: 0; padding: 9px 10px; font-size: 15px; border-radius: 10px }
+.tb td:nth-child(4) input, .tb td:nth-child(5) input, .tb td:nth-child(6) input { width: 92px }
+.tb.tbs td:nth-child(2) input { min-width: 200px }
+.tb .num { text-align: center; color: var(--mut); white-space: nowrap }
+.tb .act { text-align: right; white-space: nowrap }
+.tb .ph { min-width: 120px }
+.tb .ph .thumbs, .tb .ph { gap: 6px }
+.tb .th, .tb .addph { width: 40px; height: 40px; display: inline-grid; vertical-align: middle; margin: 0 6px 0 0; border-radius: 10px }
+.tb .th { display: inline-block; position: relative }
+.tb .th img { border-radius: 10px }
+.tb .th button { width: 18px; height: 18px; font-size: 10px; top: -5px; right: -5px; line-height: 1; padding: 0 }
+.tb .addph { font-size: 20px; border-width: 1.5px }
+.tb tr.mr td { background: var(--tile); border-top: 0 }
+.tb tr.mr .g { grid-template-columns: 2fr 1fr 1fr; gap: 0 14px }
+.tb input[type=checkbox] { width: 18px; height: 18px; margin: 0 }
+button.link { background: none; border: 0; font: 700 14px Urbanist, sans-serif; color: var(--ink); cursor: pointer; padding: 0 8px 0 0 }
+.wrap { max-width: 1180px }
+
+/* ---- Login: card centred in the middle of the screen ---- */
+.lgx { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px }
+.lgx.hide { display: none }
+.lgc { width: 100%; max-width: 400px; background: var(--tile); border-radius: 28px; padding: 34px 26px 28px; text-align: center }
+.lgc .lgl { display: block; height: 72px; width: auto; max-width: 100%; margin: 0 auto 14px }
+.lgc h1 { font-size: 26px; margin-bottom: 18px }
+.lgc h2 { font-size: 20px }
+.lgc form { text-align: left }
+.lgc input { margin-bottom: 14px }
+.lgc .note { text-align: center; min-height: 1.2em }
+
+/* ---- Tabs ---- */
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 14px; margin-bottom: 8px; border-bottom: 1px solid var(--line); scrollbar-width: none }
+.tabs::-webkit-scrollbar { display: none }
+.tabs button { flex: none; border: 0; background: none; color: var(--mut); font: 700 15px Urbanist, sans-serif; padding: 10px 16px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s }
+.tabs button:hover { color: var(--ink) }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg) }
+.cnt { display: inline-block; min-width: 20px; padding: 1px 6px; margin-left: 7px; border-radius: 999px; background: #d33; color: #fff; font-size: 12px; text-align: center }
+.cnt.hide { display: none }
+.tabp { padding-top: 12px }
+.tabp.hide { display: none }
+
+/* ---- Empty field that must be filled before saving ---- */
+.tb input.bad { border-color: #d33; box-shadow: 0 0 0 3px color-mix(in srgb, #d33 25%, transparent) }
+
+/* ---- Favourite star (replaces the check box): pops and sparkles when switched on ---- */
+button.star { position: relative; width: 36px; height: 36px; border: 0; background: none; padding: 0; cursor: pointer; color: var(--mut); border-radius: 50%; display: inline-grid; place-items: center }
+button.star:hover { color: #f5b301 }
+button.star svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; transition: fill .2s, stroke .2s }
+button.star.on { color: #f5b301 }
+button.star.on svg { fill: #f5b301 }
+button.star i { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: #f5b301; opacity: 0; pointer-events: none }
+button.star.pop svg { animation: starpop .55s cubic-bezier(.2, 1.6, .4, 1) }
+button.star.pop:not(.on) svg { animation: starout .3s ease }
+button.star.pop.on i { animation: spark .6s ease-out }
+@keyframes starpop { 0% { transform: scale(.6) rotate(-35deg) } 55% { transform: scale(1.45) rotate(12deg) } 100% { transform: scale(1) rotate(0) } }
+@keyframes starout { 0% { transform: scale(1) } 50% { transform: scale(.7) } 100% { transform: scale(1) } }
+@keyframes spark { 0% { opacity: 1; transform: rotate(var(--a)) translateY(-8px) scale(1) } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-24px) scale(.3) } }
+@media (prefers-reduced-motion: reduce) { button.star.pop svg, button.star.pop i { animation: none !important } }
+
+/* ---- Dashboard ---- */
+.kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(176px, 1fr)); gap: 12px; margin-bottom: 14px }
+.kpi { background: var(--tile); border-radius: 20px; padding: 16px 18px }
+.kpi small { display: block; color: var(--mut); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .4px }
+.kpi b { display: block; white-space: nowrap; font-size: 26px; line-height: 1.15; margin: 6px 0 2px; font-weight: 800 }
+.kpi span { color: var(--mut); font-size: 13px }
+.kpi.alert b { color: #d33 }
+.dh { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin: 24px 0 12px }
+.dh h2 { margin: 0 }
+.seg2 { display: inline-flex; background: var(--tile); border-radius: 999px; padding: 4px }
+.seg2 button { border: 0; background: none; color: var(--mut); font: 700 13px Urbanist, sans-serif; padding: 7px 14px; border-radius: 999px; cursor: pointer }
+.seg2 button[aria-pressed="true"] { background: var(--ink); color: var(--bg) }
+.chart { display: flex; align-items: flex-end; gap: 3px; height: 190px; padding: 12px 10px 0; background: var(--tile); border-radius: 20px 20px 0 0 }
+.chart .cb { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; cursor: pointer; border: 0; background: none; padding: 0 }
+.chart .cb i { display: block; width: 100%; max-width: 26px; min-height: 2px; border-radius: 6px 6px 0 0; background: color-mix(in srgb, var(--ink) 22%, transparent); transition: background .15s, height .4s }
+.chart .cb.has i { background: var(--ink) }
+.chart .cb:hover i, .chart .cb.sel i { background: #2fb36b }
+.cax { display: flex; gap: 3px; padding: 6px 10px 10px; background: var(--tile); border-radius: 0 0 20px 20px; font-size: 11px; color: var(--mut) }
+.cax span { flex: 1; min-width: 0; text-align: center; white-space: nowrap; overflow: visible }
+.cdet { min-height: 22px; margin: 10px 4px 0; font-weight: 700; font-size: 14px }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px }
+.tb.tbd { min-width: 0 }
+.tb.tbd td, .tb.tbd th { text-align: right; white-space: nowrap }
+.tb.tbd td:first-child, .tb.tbd th:first-child { text-align: left }
+.tb.tbd tr.zero td { color: var(--mut) }
+
+/* ---- Orders ---- */
+.ofil { display: flex; flex-wrap: wrap; gap: 10px }
+.ofil input, .ofil select { margin: 0; flex: 1 1 240px; width: auto }
+.tb.tbo { min-width: 860px }
+.tb.tbo td { white-space: nowrap }
+.tb.tbo td small { display: block; color: var(--mut) }
+.tb.tbo td.wrapc { white-space: normal; min-width: 170px }
+.bdg { display: inline-block; border: 0; border-radius: 999px; padding: 5px 12px; font: 700 12px Urbanist, sans-serif; cursor: pointer; background: color-mix(in srgb, #d33 14%, transparent); color: #d33 }
+.bdg.done { background: color-mix(in srgb, #2fb36b 16%, transparent); color: #1f8a50 }
+.ok-m { color: #1f8a50; font-weight: 700 }
+.ko-m { color: var(--mut) }
+.tb tr.od td { background: var(--tile); border-top: 0; white-space: normal }
+.od-l { display: grid; gap: 4px; margin-top: 6px }
+.od-l div { display: flex; justify-content: space-between; gap: 12px; max-width: 460px }
+@media (prefers-color-scheme: dark) { .bdg.done, .ok-m { color: #5fd391 } }
+
+/* ---- Orders as cards on phones ---- */
+@media (max-width: 700px) {
+    .tb.tbo, .tb.tbo tbody { display: block; min-width: 0 }
+    .tb.tbo thead { display: none }
+    .tb.tbo tr.pr { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 14px; border-top: 1px solid var(--line) }
+    .tb.tbo tr.pr:first-child { border-top: 0 }
+    .tb.tbo tr.pr td { border: 0; padding: 0; white-space: normal }
+    .tb.tbo td:nth-child(3) { order: 1; flex: 1 1 55% }
+    .tb.tbo td:nth-child(5) { order: 2; font-size: 17px; text-align: right }
+    .tb.tbo td:nth-child(1) { order: 3; flex: 1 1 45%; color: var(--mut); font-size: 13px }
+    .tb.tbo td:nth-child(2) { order: 4; flex: 1 1 45%; text-align: right; font-size: 13px }
+    .tb.tbo td:nth-child(4) { order: 5; font-size: 14px }
+    .tb.tbo td:nth-child(6) { order: 6; font-size: 14px; margin-left: auto }
+    .tb.tbo td:nth-child(7) { order: 7 }
+    .tb.tbo td:nth-child(8) { order: 8; margin-left: auto }
+    .tb.tbo tr.od { display: block; padding: 0 14px 14px; background: var(--tile) }
+    .tb.tbo tr.od td { display: block; padding: 12px 0 0 }
+}
+
+.tabs button.out { margin-left: auto; color: #d33 }
+.tabs button.out:hover { color: #d33; text-decoration: underline }
+
+/* ---- Orders: PDF management card + header logout ---- */
+.ocard { display: grid; gap: 14px; margin-bottom: 14px }
+.oact { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+.oact input, .oact select { width: auto; margin: 0 }
+.pill.danger { color: #d33; border-color: #d33 }
+header #logout { padding: 10px 20px; font-size: 14px }
+
+/* ---- Admin: hover animations (same rules as styles.css section 21) ---- */
+.tabs button, .seg2 button, .bdg, button.star, .th, .addph { transition: transform .2s cubic-bezier(.2, .8, .2, 1), background-color .2s ease, color .2s ease, box-shadow .2s ease }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .tabs button:not([aria-selected="true"]):hover { background: var(--tile); transform: translateY(-2px) }
+    .seg2 button:not([aria-pressed="true"]):hover { color: var(--ink); transform: translateY(-1px) }
+    .bdg:hover { transform: scale(1.08) }
+    button.star:hover { transform: scale(1.18) rotate(-8deg) }
+    .kpi { transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .25s ease }
+    .kpi:hover { transform: translateY(-3px); box-shadow: 0 14px 24px -16px color-mix(in srgb, var(--ink) 55%, transparent) }
+    .chart .cb:hover i { transform: scaleX(1.12) }
+}
+
+/* ---- Orders: colour chosen by the customer ---- */
+.odots { display: flex; gap: 3px; margin-top: 4px }
+.odots i, .ocol i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--line) }
+.ocol { display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; font-size: 12px; color: var(--mut) }
+.ocol.same { font-style: italic }
+
+/* ---- Admin header buttons (shop link + logout) ---- */
+.hbtns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end }
+header #shop { padding: 10px 20px; font-size: 14px; text-decoration: none }
+@media (max-width: 520px) { header .logo img { height: 44px } header #shop, header #logout { padding: 8px 14px; font-size: 13px } }
+
+/* Admin: service ratings list */
+.fbrow { padding: 10px 0; border-bottom: 1px solid var(--line) }
+.fbrow:last-child { border-bottom: 0 }
+.fbst { color: var(--star, #f5a623); letter-spacing: 1px }
+.fbrow .link { background: none; border: 0; padding: 0; margin-top: 4px; cursor: pointer; color: #d33 }
+
+/* ---- Automatic save: circular loader on the zone being saved (see zoneMark() in admin-ui.js) ------------------
+   .zs-saving = spinning circle, .zs-saved = green tick (1.5 s), .zs-failed = red "!". Table rows show it in their last cell,
+   cards and table boxes in their top-right corner. */
+@keyframes zspin { to { transform: rotate(360deg) } }
+tr.zs-saving > td:last-child, tr.zs-saved > td:last-child, tr.zs-failed > td:last-child,
+.card.zs-saving, .card.zs-saved, .card.zs-failed, .tw.zs-saving, .tw.zs-saved, .tw.zs-failed { position: relative }
+tr.zs-saving, tr.zs-saved, tr.zs-failed { background: var(--tile) }
+:is(tr.zs-saving > td:last-child, .card.zs-saving, .tw.zs-saving)::after,
+:is(tr.zs-saved > td:last-child, .card.zs-saved, .tw.zs-saved)::after,
+:is(tr.zs-failed > td:last-child, .card.zs-failed, .tw.zs-failed)::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 9px);     /* row loaders sit in the left part of the last cell (the buttons column), vertically centred */
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    text-align: center;
+    font: 800 15px/18px sans-serif
+}
+.card.zs-saving::after, .card.zs-saved::after, .card.zs-failed::after,
+.tw.zs-saving::after, .tw.zs-saved::after, .tw.zs-failed::after { top: 12px; left: auto; right: 14px; width: 18px; height: 18px; line-height: 18px; font-size: 14px }
+:is(tr.zs-saving > td:last-child, .card.zs-saving, .tw.zs-saving)::after { border: 2.5px solid var(--line); border-top-color: var(--ink); animation: zspin .7s linear infinite }
+:is(tr.zs-saved > td:last-child, .card.zs-saved, .tw.zs-saved)::after { content: "✓"; color: #1a8a4a }
+:is(tr.zs-failed > td:last-child, .card.zs-failed, .tw.zs-failed)::after { content: "!"; color: #d33 }
+@media (prefers-reduced-motion: reduce) { :is(tr.zs-saving > td:last-child, .card.zs-saving, .tw.zs-saving)::after { animation-duration: 2s } }
+
+/* ---- Edit mode: rows are read-only until "Modifier" is pressed (see admin.js) ---- */
+.pill.sm { padding: 8px 16px; font-size: 14px }
+.dvact { margin-top: 12px }
+.tb tr.ed td { background: var(--tile) }
+.tb input:disabled, .tb select:disabled, .tb textarea:disabled, .card input:disabled:not([type=checkbox]) {
+    background: transparent; border-color: transparent; color: var(--ink); -webkit-text-fill-color: var(--ink); opacity: 1; cursor: default;
+    -webkit-appearance: none; appearance: none; resize: none
+}
+.tb select:disabled { background-image: none }
+.tb input[type=color]:disabled { opacity: .85 }
+button.star:disabled { cursor: default; pointer-events: none }
+button.star:disabled:not(.on) { opacity: .45 }
+/* a row / card that is being saved cannot be clicked again */
+tr.zs-saving button, tr.zs-saving label.addph, .card.zs-saving button { pointer-events: none; opacity: .5 }
+/* the second (details) row of a product shares the zone class but must not show a second loader */
+tr.mr.zs-saving > td:last-child::after, tr.mr.zs-saved > td:last-child::after, tr.mr.zs-failed > td:last-child::after { display: none }
+
+/* ---- Success panel editor (Réglages tab) ---- */
+.chk { display: flex; align-items: center; gap: 8px; font-weight: 600; margin: 4px 0 12px }
+.chk input { width: auto; margin: 0 }
+.achrow { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; margin-bottom: 8px; align-items: center }
+.achrow button { min-width: 32px }
+@media (max-width: 700px) { .achrow { grid-template-columns: 1fr auto } .achrow input:nth-child(2) { grid-column: 1 / -1; grid-row: 2 } }
+
+/* ---- "Sur mesure" tab: one card per request (admin-custom.js) ---- */
+.crq { display: grid; gap: 8px; margin-bottom: 12px }
+.crq-h { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px }
+.crq-h span { color: var(--mut); font-size: 13px }
+.crq p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere }
+.crq-m { color: var(--mut); font-size: 13px }
+.crq .oact { margin-top: 4px }
+
+/* Codes promo tab */
+.promof { display: flex; flex-wrap: wrap; gap: 12px; align-items: end }
+.promof > div { flex: 1 1 160px }
+.promof input { margin-bottom: 0 }
+.promof .pill { flex: 0 0 auto }
+#prlist .tb { min-width: 520px }
+#prlist tr.off td { opacity: .55 }
+#prlist tr.off td:last-child, #prlist tr.off td:nth-child(4) { opacity: 1 }

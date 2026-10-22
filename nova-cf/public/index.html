@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>NOVA 3D – Gadgets imprimés en 3D</title>
+    <!-- SEO (Google, Facebook, WhatsApp previews). Edit the title/description here. The domain is set by the command "npm run seo" (see DEPLOY.md). -->
+    <meta name="description" content="Porte-clés personnalisés, jouets anti-stress et objets imprimés en 3D, fabriqués à la commande. Choisissez une pièce prête ou décrivez votre idée : NOVA 3D l'imprime pour vous.">
+    <link rel="canonical" href="https://nova.pieca.workers.dev/">
+    <meta name="google-site-verification" content="CKgDT9AVxh9oe0qsEJElBKvcx_12VwyKVs31qpXIwsY" />
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NOVA 3D">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="NOVA 3D – Porte-clés et gadgets imprimés en 3D">
+    <meta property="og:description" content="Porte-clés personnalisés, jouets anti-stress et objets imprimés en 3D, fabriqués à la commande. Choisissez une pièce prête ou décrivez votre idée : NOVA 3D l'imprime pour vous.">
+    <meta property="og:url" content="https://nova.pieca.workers.dev/">
+    <meta property="og:image" content="https://nova.pieca.workers.dev/images/NOVA_3D_logo_transparent.png">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"NOVA 3D","url":"https://nova.pieca.workers.dev/","logo":"https://nova.pieca.workers.dev/images/NOVA_3D_logo_transparent.png","description":"Porte-clés et gadgets imprimés en 3D, fabriqués à la commande."}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"NOVA 3D","url":"https://nova.pieca.workers.dev/"}</script>
+    <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#111111">
+    <link rel="apple-touch-icon" href="/images/icon-180.png">
+    <script src="/js/theme.js"></script>
+</head>
+
+<!-- HOME PAGE (data-page="home"). Standard page skeleton shared by all public pages: <body data-page="..."> tells the scripts in /js which page this is; #hd (header) and #ft (footer) are filled by the scripts in /js; <main> holds this page's own content. Styles: /css/styles.css -->
+<body data-page="home">
+    <!-- BACKGROUND: the 3D printer animation (script: /js/printer-anim.js). It is FIXED behind the page, so it stays at the top while the
+         visitor scrolls: the white "cover" below slides over it. Options on the inner div: data-color (keychain colour), data-bg (background, default
+         transparent). To remove it, delete this block and the printer-anim.js script tag at the bottom of the page. -->
+    <div class="printer-bg" id="printerBg" aria-hidden="true">
+        <div data-printer-anim data-color="#ffffff"></div>
+    </div>
+    <div class="wrap">
+        <div id="hd"></div>
+        <main>
+            <!-- BANNER: title, text and button on the left; . Edit the wording here. -->
+            <section class="hero hero-bg">
+                <div class="hero-txt">
+                    <h1>De petits objets, imprimés couche par couche.</h1>
+                    <div class="desc">
+                        <p>NOVA 3D fabrique des porte-clés et des jouets anti-stress avec une imprimante 3D, commande
+                            par commande. Choisissez une pièce prête, ou décrivez un objet et nous l'imprimons pour
+                            vous.</p>
+                    </div>
+                    <p style="margin-top:22px"><a class="pill" href="/produits/">Voir les produits</a></p>
+                </div>
+                <a class="scroll-hint" href="#after" aria-label="Voir la suite"><span></span></a>
+            </section>
+            <!-- COVER: everything after the banner slides over the fixed printer animation -->
+            <div class="cover" id="after">
+            <!-- SUCCESS PANEL: texts are written in the admin (Réglages > Panneau de réussites); the three figures are counted from the real orders
+                 and shown only as brackets ("99+"). Filled by drawAchievements() in /js/home.js; stays hidden when switched off or empty.
+                 Layout: top = tagline + the title repeated 3 times; bottom = figures, button, highlights (flat, colourful, no 3D). -->
+            <section class="rv" id="achSec" aria-labelledby="achT" hidden>
+                <div class="ach" id="ach">
+                    <div class="ach-top">
+                        <p class="ach-tag" id="achS"></p>
+                        <h2 class="ach-word" id="achT"></h2>
+                    </div>
+                    <div class="ach-card">
+                        <ul class="ach-stats" id="achStats"></ul>
+                        <div class="ach-act">
+                            <a class="pill" href="/sur-mesure/">Commander sur mesure</a>
+                            <a class="ach-go" href="/sur-mesure/" aria-label="Commander sur mesure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                            <i class="ach-line" aria-hidden="true"></i>
+                        </div>
+                        <ul class="ach-notes" id="achCards"></ul>
+                    </div>
+                </div>
+            </section>
+            <section class="rv">
+                <div class="head">
+                    <h2>Meilleures ventes</h2>
+                </div>
+                <!-- BEST SELLERS: #bestGrid is filled by the scripts in /js with the products ticked "Meilleure vente" in the admin (or the first 4 products). -->
+                <!-- Swipeable cards: slide with the finger (phone) or use the arrows / scroll (computer). -->
+                <div class="swipe-wrap" id="bestWrap">
+                    <div class="swipe" id="bestGrid" aria-busy="true" tabindex="0" role="region" aria-label="Meilleures ventes : faites glisser pour voir les autres produits"><div class="p sk"><span class="tile"></span><i></i><i></i></div><div class="p sk"><span class="tile"></span><i></i><i></i></div><div class="p sk"><span class="tile"></span><i></i><i></i></div></div>
+                    <button type="button" class="sw-btn prev" data-sw="-1" aria-label="Produit précédent">‹</button>
+                    <button type="button" class="sw-btn next" data-sw="1" aria-label="Produit suivant">›</button>
+                </div>
+                <p style="margin-top:22px"><a class="pill out" href="/produits/">Voir tous les produits</a></p>
+            </section>
+            <!-- REVIEWS: animated cards of customer screenshots. Uploaded / deleted in the admin ("Avis clients"); /js/reviews.js fills #rcards. The section stays hidden while there are no screenshots. -->
+            <section class="rv" id="reviewsSec" hidden>
+                <div class="head">
+                    <h2>Avis clients</h2>
+                </div>
+                <div class="rmarq" id="rcards" aria-label="Captures d'avis de nos clients"></div>
+            </section>
+            <!-- SERVICE RATING: 1 (mauvais) to 5 stars (très bien) + optional name and comment. /js/feedback.js handles the form and the list. Abusive comments are deleted in the admin. -->
+            <section class="rv" id="feedbackSec">
+                <div class="head">
+                    <h2>Votre avis compte</h2>
+                    <span class="fb-sum" id="fbSum" aria-live="polite"></span>
+                </div>
+                <div class="fb">
+                    <form id="fbForm" class="fb-form" novalidate>
+                        <fieldset class="stars">
+                            <legend>Notez notre service</legend>
+                            <div class="stars-row">
+                                <input type="radio" name="stars" id="st5" value="5"><label for="st5" aria-label="Très satisfait">★</label>
+                                <input type="radio" name="stars" id="st4" value="4"><label for="st4" aria-label="Satisfait">★</label>
+                                <input type="radio" name="stars" id="st3" value="3"><label for="st3" aria-label="Moyennement satisfait">★</label>
+                                <input type="radio" name="stars" id="st2" value="2"><label for="st2" aria-label="Peu satisfait">★</label>
+                                <input type="radio" name="stars" id="st1" value="1"><label for="st1" aria-label="Insatisfait">★</label>
+                            </div>
+                            <p class="fb-word" id="fbWord" aria-live="polite">Passez sur les étoiles pour noter</p>
+                        </fieldset>
+                        <label for="fbName">Votre prénom <small>(facultatif : laissez vide pour rester anonyme)</small></label>
+                        <input id="fbName" type="text" maxlength="40" autocomplete="given-name">
+                        <label for="fbText">Votre commentaire <small>(facultatif)</small></label>
+                        <textarea id="fbText" maxlength="500" rows="3"></textarea>
+                        <input type="text" id="fbWeb" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                        <button type="submit" class="pill">Envoyer mon avis</button>
+                        <span class="fb-msg" id="fbMsg" role="status"></span>
+                    </form>
+                    <div class="fb-list" id="fbList"></div>
+                </div>
+            </section>
+            </div>
+        </main>
+        <div id="ft"></div>
+    </div>
+    <script src="/js/core.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/data.js" defer></script>
+    <script src="/js/home.js" defer></script>
+    <script src="/js/reviews.js" defer></script>
+    <script src="/js/feedback.js" defer></script>
+    <script src="/js/events.js" defer></script>
+    <script src="/js/main.js" defer></script>
+    <script src="/js/printer-anim.js" defer></script>
+</body>
+
+</html>

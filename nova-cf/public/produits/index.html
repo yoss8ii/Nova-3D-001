@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Produits – Porte-clés, fidgets et gadgets 3D | NOVA 3D</title>
+    <!-- SEO (Google, Facebook, WhatsApp previews). Edit the title/description here. The domain is set by the command "npm run seo" (see DEPLOY.md). -->
+    <meta name="description" content="Découvrez tous les produits NOVA 3D : porte-clés avec prénom, fidgets et gadgets imprimés en 3D, avec prix et stock en temps réel.">
+    <link rel="canonical" href="https://nova.pieca.workers.dev/produits/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NOVA 3D">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Produits – Porte-clés, fidgets et gadgets 3D | NOVA 3D">
+    <meta property="og:description" content="Découvrez tous les produits NOVA 3D : porte-clés avec prénom, fidgets et gadgets imprimés en 3D, avec prix et stock en temps réel.">
+    <meta property="og:url" content="https://nova.pieca.workers.dev/produits/">
+    <meta property="og:image" content="https://nova.pieca.workers.dev/images/NOVA_3D_logo_transparent.png">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#111111">
+    <link rel="apple-touch-icon" href="/images/icon-180.png">
+    <script src="/js/theme.js"></script>
+</head>
+
+<!-- PRODUCTS PAGE (data-page="shop"). Standard page skeleton shared by all public pages: <body data-page="..."> tells the scripts in /js which page this is; #hd (header) and #ft (footer) are filled by the scripts in /js; <main> holds this page's own content. Styles: /css/styles.css -->
+<body data-page="shop">
+    <div class="wrap">
+        <div id="hd"></div>
+        <main>
+            <section>
+                <h1 style="font-size:36px">Produits</h1>
+                <!-- Search box #q, sort menu #so and category buttons #chips (categories + Promos + Favoris), all driven by /js/shop.js -->
+                <div class="tools"><input id="q" type="search" placeholder="Rechercher un produit"
+                        aria-label="Rechercher un produit">
+                    <select id="so" aria-label="Trier les produits"><option value="">Trier : ordre de la boutique</option><option value="pa">Prix croissant</option><option value="pd">Prix décroissant</option><option value="az">Nom A–Z</option></select>
+                    <div class="chips" id="chips" role="group" aria-label="Catégories"></div>
+                </div>
+                <!-- Product grid: filled by the scripts in /js drawGrid() from /api/catalog -->
+                <div class="grid" id="grid" aria-busy="true"><div class="p sk"><span class="tile"></span><i></i><i></i></div><div class="p sk"><span class="tile"></span><i></i><i></i></div><div class="p sk"><span class="tile"></span><i></i><i></i></div><div class="p sk"><span class="tile"></span><i></i><i></i></div></div>
+            </section>
+        </main>
+        <div id="ft"></div>
+    </div>
+    <script src="/js/core.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/data.js" defer></script>
+    <script src="/js/shop.js" defer></script>
+    <script src="/js/events.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</body>
+
+</html>

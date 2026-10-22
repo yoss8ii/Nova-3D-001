@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">NOVA 3D favicon</title>
+  <desc id="desc">A bold geometric letter N with a subtle three-dimensional sage-green extrusion.</desc>
+  <rect width="512" height="512" rx="112" fill="#1C1C1E"/>
+  <!-- Sage extrusion gives the N a subtle 3D-printing / dimensional feel. -->
+  <path d="M116 374V138h70l140 151V138h70v236h-66L186 217v157z" fill="#5D9362" transform="translate(10 10)"/>
+  <path d="M106 364V128h70l140 151V128h70v236h-66L176 207v157z" fill="#FFFFFF"/>
+  <!-- Small cube accent: a simple nod to 3D fabrication. -->
+  <g transform="translate(365 355)">
+    <path d="M0 0 25-14 50 0 25 14Z" fill="#5D9362"/>
+    <path d="M0 0 25 14V43L0 29Z" fill="#FFFFFF"/>
+    <path d="M25 14 50 0V29L25 43Z" fill="#A9C8A7"/>
+  </g>
+</svg>

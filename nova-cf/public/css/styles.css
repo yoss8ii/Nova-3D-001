@@ -1,0 +1,1896 @@
+/* =====================================================================
+     * NOVA 3D - public/css/styles.css
+     * ---------------------------------------------------------------------
+     * The ONE stylesheet for every page, including the admin page.
+     *
+     * HOW TO EDIT QUICKLY
+     *   - Colours / light & dark mode : the variables at the top (:root).
+     *   - Page width                  : .wrap  (max-width 1000px)
+     *   - Phone layout                : the @media (max-width: 700px) block
+     *   - Animations                  : @keyframes float, .rv (scroll reveal)
+     *
+     * CLASS CHEAT-SHEET (names are short on purpose; the scripts in /js build the HTML)
+     *   .wrap     page container            .pill     main round button (.pill.out = outlined)
+     *   .hero     home banner               
+     *   .grid     product grid              .p        one product card
+     *   .tile     square picture area
+     *   .add      "Ajouter" button          .chip     category filter button
+     *   .rv       scroll-reveal element     .bd       red cart counter badge
+     *   .it       one cart line             .form     rounded form box
+     *   .cc       contact card (footer)     .card2    "A propos" text card
+     *   .toast    admin notifications       .hide     display:none (used by the admin page)
+     * Colours are NEVER hard-coded for text/background: use var(--bg), var(--ink),
+     * var(--mut), var(--tile), var(--line) so dark mode keeps working.
+     * ===================================================================== */
+    
+    /* ---- 1. COLOUR VARIABLES -------------------------------------------
+       --bg page background, --ink main text, --mut grey text, --tile card background,
+       --line borders, --btn / --btn-ink button colours, --star focus/stars,
+       --grid grid lines inside tiles.
+       The padding-top/bottom use the phone 'safe areas' (notch, home bar). */
+    :root {
+        --bg: #fff;
+        --ink: #111;
+        --mut: #6b6b6b;
+        --tile: #f3f4f6;
+        --line: #e6e6e6;
+        --btn: #111;
+        --btn-ink: #fff;
+        --star: #f5a623;
+        --grid: #0000000d;
+        color-scheme: light
+    }
+    
+    /* Dark mode, applied automatically when the visitor's device is in dark mode
+       (unless <html data-theme="light"> forces light). Keep the next block identical. */
+    
+    @media (prefers-color-scheme:dark) {
+        :root:not([data-theme="light"]) {
+            --bg: #101010;
+            --ink: #f2f2f2;
+            --mut: #a0a0a0;
+            --tile: #1c1c1f;
+            --line: #2a2a2a;
+            --btn: #f2f2f2;
+            --btn-ink: #111;
+            --grid: #ffffff10;
+        }
+    }
+    
+    /* Same dark colours, but forced with <html data-theme="dark">. Keep in sync with the block above. */
+    
+    :root[data-theme="dark"] {
+        --bg: #101010;
+        --ink: #f2f2f2;
+        --mut: #a0a0a0;
+        --tile: #1c1c1f;
+        --line: #2a2a2a;
+        --btn: #f2f2f2;
+        --btn-ink: #111;
+        --grid: #ffffff10;
+    }
+    
+    /* ---- 2. BASE ELEMENTS ---------------------------------------------- */
+    
+    html {
+        scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 64px);
+        scroll-behavior: smooth
+    }
+    
+    * {
+        box-sizing: border-box
+    }
+    
+    body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Urbanist, system-ui, sans-serif;
+        line-height: 1.5
+    }
+    
+    /* Page container: centred, max 1000 px wide */
+    
+    .wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 20px
+    }
+    
+    /* Logo image (the SVG file is /images/NOVA_3D_logo.svg) */
+    
+    .logo {
+        display: inline-block;
+        line-height: 0;
+        text-decoration: none
+    }
+    .logo img {
+        display: block;
+        height: 48px;
+        width: auto
+    }
+    @media (max-width: 480px) {
+        .logo img { height: 40px }
+    }
+    
+    
+    /* Old text/background-image version of the logo, kept as a reference only: */
+    
+    /*.logo {
+        
+        font-weight: 800;
+        font-size: 24px;
+        letter-spacing: -.03em;
+        display: inline-block;
+        width: 140px;
+        height: 48px;
+        background-image: url("/images/NOVA_3D_logo.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        font-size: 0;
+        text-decoration: none;
+    }*/
+    
+    
+    /* Menu links. Active page = aria-current="page" (see further down). */
+    
+    nav {
+        display: flex;
+        gap: 6px
+    }
+    
+    nav a,
+    .hbtn {
+        border: 0;
+        background: none;
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font: 700 14px inherit;
+        font-family: inherit;
+        cursor: pointer;
+        text-decoration: none
+    }
+    
+    nav a:hover,
+    .hbtn:hover {
+        background: var(--tile)
+    }
+    
+    /* ---- 4. TITLES & SECTIONS ------------------------------------------- */
+    
+    h1 {
+        font-size: clamp(36px, 8vw, 64px);
+        line-height: 1;
+        letter-spacing: -.045em;
+        margin: 0 0 14px;
+        font-weight: 800
+    }
+    
+    h2 {
+        font-size: 26px;
+        letter-spacing: -.025em;
+        margin: 0;
+        font-weight: 800
+    }
+    
+    section {
+        padding: 30px 0
+    }
+    
+    /* ---- 5. HOME PAGE: banner ------------------------------------------
+       .hero = banner text. */
+    
+    .hero {
+        display: grid;
+        gap: 24px;
+        align-items: center;
+        padding-top: 14px
+    }
+    
+    @media(min-width:800px) {
+        .hero {
+            grid-template-columns: 1.05fr 1fr
+        }
+    }
+    
+    @keyframes float {
+        50% {
+            translate: 0 -10px
+        }
+    }
+    
+    /* .seg = segmented toggle buttons. Currently UNUSED (legacy from the language switch). */
+    
+    .seg {
+        display: inline-flex;
+        background: var(--tile);
+        border-radius: 999px;
+        padding: 4px;
+        margin-bottom: 14px
+    }
+    
+    .seg button {
+        border: 0;
+        background: none;
+        color: var(--mut);
+        border-radius: 999px;
+        padding: 8px 18px;
+        font: 700 14px inherit;
+        font-family: inherit;
+        cursor: pointer
+    }
+    
+    .seg button[aria-pressed="true"] {
+        background: var(--btn);
+        color: var(--btn-ink)
+    }
+    
+    /* Banner description paragraph (.desc [lang=ar] = Arabic font, unused for now) */
+    
+    .desc p {
+        margin: 0;
+        font-size: 18px;
+        max-width: 50ch;
+        color: var(--mut)
+    }
+    
+    .desc [lang=ar] {
+        font-family: Tajawal, Urbanist, sans-serif;
+        font-size: 20px
+    }
+    
+    /* ---- 6. BUTTONS & GENERIC PARTS -------------------------------------
+       .pill = main button. .pill.out = outlined variant. :focus-visible = keyboard focus ring. */
+    
+    .pill {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        background: var(--btn);
+        color: var(--btn-ink);
+        border: 0;
+        border-radius: 999px;
+        padding: 15px 28px;
+        font: 700 16px inherit;
+        font-family: inherit;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform .15s
+    }
+    
+    .pill:active,
+    .add:active {
+        transform: scale(.96)
+    }
+    
+    .pill.out {
+        background: none;
+        color: var(--ink);
+        border: 1.5px solid var(--ink)
+    }
+    
+    :focus-visible {
+        outline: 3px solid var(--star);
+        outline-offset: 2px
+    }
+    
+    /* Section title row: title on the left, link on the right */
+    
+    .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 16px
+    }
+    
+    .link {
+        background: none;
+        border: 0;
+        color: var(--ink);
+        font: 700 15px inherit;
+        font-family: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0
+    }
+    
+    /* ---- 7. PRODUCTS PAGE: search box + category chips ------------------- */
+    
+    .tools {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 16px
+    }
+    
+    .tools input {
+        flex: 1;
+        min-width: 160px;
+        margin: 0;
+        border-radius: 999px;
+        padding: 11px 18px
+    }
+    
+    .chips {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+    }
+    
+    .chip {
+        border: 1.5px solid var(--ink);
+        background: none;
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 8px 18px;
+        font: 700 14px inherit;
+        font-family: inherit;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    
+    /* Faded background + stronger border shadow */
+    .chip:hover {
+        background: color-mix(in srgb, var(--btn) 10%, transparent);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+    }
+    
+    .chip[aria-pressed="true"] {
+        background: var(--btn);
+        color: var(--btn-ink);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    }
+    /* ---- 8. PRODUCT GRID & TILES -----------------------------------------
+       .grid = 2 columns on phone, 4 from 760 px.
+       .tile = square area with the photo, or the 3D preview if there is no photo.
+       --c on the tile = product colour (set inline by the scripts in /js). */
+    
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 14px
+    }
+    
+    @media(min-width:760px) {
+        .grid {
+            grid-template-columns: repeat(4, 1fr)
+        }
+    }
+    
+    .tile {
+        position: relative;
+        display: block;
+        width: 100%;
+        border: 0;
+        padding: 0;
+        color: inherit;
+        border-radius: 24px;
+        aspect-ratio: 1;
+        overflow: hidden;
+        cursor: pointer;
+        background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c, #9aa3ad) 34%, transparent), transparent 70%), linear-gradient(var(--grid) 1px, transparent 1px) 0 0/22px 22px, linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/22px 22px, var(--tile)
+    }
+    
+    /* Product without photo: neutral picture icon */
+    .noph { display: grid; place-items: center; width: 100%; height: 100%; color: color-mix(in srgb, var(--ink) 30%, transparent) }
+    .noph svg { width: 34%; height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round }
+
+    /* ---- 10. PRODUCT CARD TEXT -------------------------------------------- */
+    
+    .p h3 {
+        margin: 10px 0 2px;
+        font-size: 16px;
+        font-weight: 700
+    }
+    
+    .meta {
+        font-size: 12px;
+        color: var(--mut)
+    }
+    
+    .meta b {
+        color: var(--star)
+    }
+    
+    .prow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px
+    }
+    
+    .price {
+        font-weight: 800;
+        font-size: 18px
+    }
+    
+    .add {
+        background: var(--btn);
+        color: var(--btn-ink);
+        border: 0;
+        border-radius: 999px;
+        padding: 7px 16px;
+        font: 700 13px inherit;
+        font-family: inherit;
+        cursor: pointer;
+        transition: transform .15s
+    }
+    
+    /* ---- 10b. HOME PAGE: printer animation ------------------------------
+       No frame, no background: the canvas is transparent and follows the page colours / dark mode
+       (palette switch is done in js/printer-anim.js). Slightly wider than the page column. */
+    
+    body {
+        overflow-x: clip
+    }
+    
+    .printer-band {
+        width: min(100vw, 1100px);
+        margin: 30px 0 30px calc(50% - min(100vw, 1100px) / 2)
+    }
+    
+    /* ---- 11. HOME PAGE: customer review cards ---------------------------
+       Screenshots uploaded in the admin ("Avis clients"). js/reviews.js fills #rcards with the cards
+       (the set is written twice so the loop is seamless). .rmarq = window with faded edges,
+       .rtrack = the sliding row, .rc = one card. Pauses on hover/focus. */
+    
+    [hidden] {
+        display: none !important
+    }
+    
+    .rmarq {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)
+    }
+    
+    .rtrack {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: max-content;
+        padding: 22px 16px 22px 0;   /* right padding = gap, so -50% loops exactly */
+        animation: rscroll var(--dur, 40s) linear infinite
+    }
+    
+    .rmarq:hover .rtrack,
+    .rmarq:focus-within .rtrack {
+        animation-play-state: paused
+    }
+    
+    .rc {
+        flex: none;
+        width: 210px;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--tile);
+        overflow: hidden;
+        cursor: zoom-in;
+        animation: float 6s ease-in-out infinite;
+        transition: transform .25s ease, box-shadow .25s ease
+    }
+    
+    .rc:nth-child(3n+2) {
+        animation-delay: -2s
+    }
+    
+    .rc:nth-child(3n) {
+        animation-delay: -4s
+    }
+    
+    .rc:hover,
+    .rc:focus-visible {
+        transform: scale(1.05) rotate(-1.2deg);
+        box-shadow: 0 14px 34px #0000002e;
+        outline: 0
+    }
+    
+    .rc img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 440px;
+        object-fit: contain
+    }
+    
+    @keyframes rscroll {
+        to {
+            transform: translateX(-50%)
+        }
+    }
+    
+    /* Full-size view of a review (opened by clicking a card) */
+    
+    dialog.rdlg {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        max-width: min(92vw, 460px);
+        overflow: visible
+    }
+    
+    dialog.rdlg::backdrop {
+        background: #000a
+    }
+    
+    .rdlg img {
+        display: block;
+        width: 100%;
+        max-height: 86vh;
+        object-fit: contain;
+        border-radius: 20px
+    }
+    
+    /* Less motion: no sliding, the visitor scrolls the row by hand; the repeated copy is hidden */
+    
+    @media (prefers-reduced-motion: reduce) {
+        .rmarq {
+            overflow-x: auto;
+            -webkit-mask-image: none;
+            mask-image: none
+        }
+    
+        .rc[data-dup] {
+            display: none
+        }
+    }
+    
+    /* Small grey help text / form messages */
+    
+    .note {
+        font-size: 12px;
+        color: var(--mut);
+        margin-top: 10px
+    }
+    
+    /* ---- 12. FORMS (cart + custom order + admin) ---------------------------- */
+    
+    .form {
+        background: var(--tile);
+        border-radius: 28px;
+        padding: 24px
+    }
+    
+    label {
+        display: block;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 4px
+    }
+    
+    input,
+    textarea {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        padding: 13px 14px;
+        font: 16px inherit;
+        font-family: inherit;
+        background: var(--bg);
+        color: var(--ink);
+        margin-bottom: 12px
+    }
+    
+    textarea {
+        min-height: 110px;
+        resize: vertical
+    }
+    
+    /* Colour swatches on the custom-order page */
+    
+    .sw {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px
+    }
+    
+    .sw button {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 3px solid var(--bg);
+        background: var(--c, #9aa3ad);
+        cursor: pointer;
+        box-shadow: 0 0 0 1.5px var(--line)
+    }
+    
+    .sw button[aria-pressed="true"] {
+        box-shadow: 0 0 0 3px var(--ink)
+    }
+    
+    /* .empty = dashed empty box. Currently UNUSED. */
+    
+    .empty {
+        border: 2px dashed var(--line);
+        border-radius: 24px;
+        min-height: 150px
+    }
+    
+    /* Old footer rule (the real footer uses .foot further down) */
+    
+    footer {
+        padding: 20px 0 100px;
+        color: var(--mut);
+        font-size: 13px
+    }
+    
+    /* ---- 13. QUICK-VIEW POPUP (<dialog id="qv">, opened by openQ() in js/ui.js) ---
+       .cl = close button, .qb = text part, .gal = thumbnails (defined below). */
+    
+    dialog {
+        border: 0;
+        border-radius: 30px;
+        padding: 0;
+        max-width: 420px;
+        width: calc(100% - 28px);
+        background: var(--bg);
+        color: var(--ink)
+    }
+    
+    dialog::backdrop {
+        background: #0007
+    }
+    
+    dialog .tile {
+        border-radius: 0;
+        cursor: default;
+        aspect-ratio: 1.1
+    }
+    
+    .qb {
+        padding: 18px 22px 22px
+    }
+    
+    .qb h3 {
+        margin: 0;
+        font-size: 24px
+    }
+    
+    .qb p {
+        color: var(--mut);
+        margin: 6px 0 14px
+    }
+    
+    .x {
+        background: none;
+        border: 0;
+        color: var(--mut);
+        cursor: pointer;
+        font: 13px inherit;
+        font-family: inherit
+    }
+    
+    .cl {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 18px;
+        cursor: pointer
+    }
+    
+    /* #cart, #cl, .sum : floating mini-cart from an older version. Currently UNUSED. */
+    
+    #cart {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+        width: min(440px, calc(100% - 28px));
+        display: none;
+        z-index: 5
+    }
+    
+    #cart .box {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 14px;
+        box-shadow: 0 12px 40px #0003
+    }
+    
+    #cl {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 10px;
+        max-height: 120px;
+        overflow: auto
+    }
+    
+    #cl li {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 4px
+    }
+    
+    #cart .pill {
+        width: 100%
+    }
+    
+    /* .hide = hidden. The admin page toggles it to show/hide the login and editor. */
+    
+    .hide {
+        display: none
+    }
+    
+    /* Accessibility: if the visitor asked for less motion, switch off every animation */
+    
+    @media (prefers-reduced-motion:reduce) {
+        * {
+            animation: none !important;
+            transition: none !important
+        }
+    }
+    
+    /* ---- 14. LATER ADDITIONS (photos, stock, gallery, cart lines, contact cards) ---- */
+    /* Popup never taller than the screen */
+    
+    dialog {
+        max-height: 92vh;
+        overflow: auto
+    }
+    
+    /* A real photo fills the whole tile */
+    
+    .tile img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+    }
+    
+    /* Stock labels: normal / .low (orange, 3 or fewer) / .out (red, sold out) */
+    
+    .stock {
+        font-size: 12px;
+        color: var(--mut)
+    }
+    
+    .stock.low {
+        color: #d97706
+    }
+    
+    .stock.out {
+        color: #d33
+    }
+    
+    .add:disabled {
+        opacity: .35;
+        cursor: not-allowed
+    }
+    
+    /* Thumbnails under the big photo in the popup */
+    
+    .gal {
+        display: flex;
+        gap: 8px;
+        padding: 12px 22px 0;
+        overflow-x: auto
+    }
+    
+    .gal button {
+        flex: none;
+        width: 56px;
+        height: 56px;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        padding: 0;
+        overflow: hidden;
+        cursor: pointer;
+        background: none
+    }
+    
+    .gal button[aria-pressed="true"] {
+        border-color: var(--ink)
+    }
+    
+    .gal img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+    }
+    
+    /* Cart page: quantity buttons  - 2 + */
+    
+    .qty {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px
+    }
+    
+    .qty button {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: none;
+        color: var(--ink);
+        cursor: pointer;
+        font-size: 15px
+    }
+    
+    .sum {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0
+    }
+    
+    .sum li {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 4px
+    }
+    
+    /* Contact cards (Facebook / Instagram / WhatsApp) built by footer() */
+    
+    .contact {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px
+    }
+    
+    .cc {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: var(--tile);
+        border-radius: 22px;
+        padding: 18px;
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 700
+    }
+    
+    .cc b {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--btn);
+        color: var(--btn-ink);
+        font-size: 15px
+    }
+    
+    .cc small {
+        display: block;
+        font-weight: 400;
+        color: var(--mut)
+    }
+    
+    
+    /* ---- 15. HEADER: rounded glass navbar ------------------------------- */
+    
+    /* Sticky wrapper: transparent, no rectangular box */
+    #hd {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 10;
+    
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+    
+    /* Rounded navigation bar */
+    #hd header {
+        position: static;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px 12px;
+    
+        margin: 10px 12px 0;
+        padding: 10px 20px;
+    
+        border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+        border-radius: 999px;
+    
+        background: transparent;   /* glass effect: see #hd > header::before in section 25 */
+    }
+    
+    /* Logo */
+    .logo {
+        color: var(--ink);
+        text-decoration: none;
+    }
+    
+    /* Navigation links */
+    nav {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        max-width: 100%;
+    }
+    
+    nav a {
+        white-space: nowrap;
+        border: 0;
+        background: none;
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-family: inherit;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    nav a:hover {
+        background: var(--tile);
+    }
+    
+    /* Active page */
+    nav a[aria-current="page"] {
+        background: var(--btn);
+        color: var(--btn-ink);
+    }
+    
+    /* Cart counter */
+    .bd {
+        display: inline-grid;
+        place-items: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        margin-left: 4px;
+        border-radius: 999px;
+        background: #d33;
+        color: #fff;
+        font-size: 11px;
+    }
+    
+    .bd:empty {
+        display: none;
+    }
+    
+    /* Header action buttons */
+    .hact {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        margin-left: 8px;
+    }
+    
+    /* Cart icon */
+    .cart-ic {
+        position: relative;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: none;
+        color: var(--ink);
+        text-decoration: none;
+    }
+    
+    .cart-ic .bd {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        margin: 0;
+    }
+    
+    .cart-ic[aria-current="page"] {
+        background: var(--tile);
+    }
+    
+    /* Mobile menu button */
+    .menu-btn {
+        display: none;
+    }
+    
+    /* Dark mode logo */
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .logo {
+            position: relative;
+            isolation: isolate;
+        }
+    
+        :root:not([data-theme="light"]) .logo img {
+            filter: invert(1);
+        }
+    
+        :root:not([data-theme="light"]) .logo::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #5D9362;
+            mix-blend-mode: lighten;
+            -webkit-mask: url("/images/NOVA_3D_logo.svg") center / contain no-repeat;
+            mask: url("/images/NOVA_3D_logo.svg") center / contain no-repeat;
+        }
+    }
+    
+    :root[data-theme="dark"] .logo {
+        position: relative;
+        isolation: isolate;
+    }
+    
+    :root[data-theme="dark"] .logo img {
+        filter: invert(1);
+    }
+    
+    :root[data-theme="dark"] .logo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #5D9362;
+        mix-blend-mode: lighten;
+        -webkit-mask: url("/images/NOVA_3D_logo.svg") center / contain no-repeat;
+        mask: url("/images/NOVA_3D_logo.svg") center / contain no-repeat;
+    }
+    
+    /* ---- 16. SCROLL REVEAL: .rv fades/slides in when js/ui.js adds .in ---------- */
+    
+    .rv {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity .7s ease, transform .7s ease
+    }
+    
+    .rv.in {
+        opacity: 1;
+        transform: none
+    }
+    
+    /* ---- 16b. SUCCESS PANEL (home) --------------------------------------------
+       Flat, colourful card (no 3D): a soft multi-colour gradient with blurred colour blobs, the title repeated 3 times in outline,
+       and the three figures as frosted tiles, each with its own accent colour (--a1 green, --a2 violet, --a3 orange).
+       Texts come from the admin; figures are counted from real orders (brackets such as "99+"). Light + dark mode follow --bg / --ink. */
+    .ach {
+        --a1: var(--acc); --a2: var(--acc2); --a3: #8a929c; --a4: #b4bbc4;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        border-radius: 32px;
+        border: 1px solid color-mix(in srgb, var(--a2) 22%, var(--line));
+        background:
+            radial-gradient(60% 80% at 8% 0%, color-mix(in srgb, var(--a1) 30%, transparent), transparent 70%),
+            radial-gradient(55% 75% at 100% 10%, color-mix(in srgb, var(--a2) 28%, transparent), transparent 70%),
+            radial-gradient(60% 70% at 85% 100%, color-mix(in srgb, var(--a3) 24%, transparent), transparent 70%),
+            radial-gradient(50% 60% at 0% 100%, color-mix(in srgb, var(--a4) 22%, transparent), transparent 70%),
+            var(--bg);
+        box-shadow: 0 24px 60px -30px color-mix(in srgb, var(--a2) 55%, transparent)
+    }
+    .ach::before, .ach::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none }
+    .ach::before { width: 260px; height: 260px; right: -70px; top: -90px; border: 38px solid color-mix(in srgb, var(--a2) 14%, transparent) }
+    .ach::after { width: 200px; height: 200px; left: -60px; bottom: -80px; border: 30px solid color-mix(in srgb, var(--a1) 16%, transparent) }
+    .ach-top { position: relative; padding: 36px 32px 8px }
+    .ach-tag { display: inline-block; margin: 0; padding: 7px 16px; border-radius: 999px; font-size: clamp(13px, 2.4vw, 16px); font-weight: 700; color: var(--ink); background: color-mix(in srgb, var(--bg) 70%, transparent); border: 1px solid color-mix(in srgb, var(--a1) 40%, var(--line)); backdrop-filter: blur(8px) }
+    .ach-word { position: relative; margin: 18px 0 0; font-size: clamp(40px, 11vw, 96px); font-weight: 800; letter-spacing: -.045em; line-height: .9; white-space: nowrap; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--a2) 45%, var(--ink)); pointer-events: none; user-select: none }
+    .ach-word span:first-child { background: linear-gradient(90deg, var(--a1), var(--a4) 40%, var(--a2) 75%, var(--a3)); -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 0 }
+    .ach-word span:not(:first-child) { opacity: .45 }
+    .ach-word.long { font-size: clamp(28px, 7.5vw, 64px) }
+    .ach-word.xl { font-size: clamp(20px, 5vw, 42px) }
+    .ach-word span { display: block }
+    .ach-word span:nth-child(2) { margin-left: 6% }
+    .ach-word span:nth-child(3) { margin-left: 12% }
+    .ach-card { position: relative; padding: 22px 32px 30px }
+    .ach-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px }
+    .ach-stats li { --a: var(--a1); position: relative; padding: 20px 20px 18px; border-radius: 22px; background: color-mix(in srgb, var(--bg) 72%, transparent); border: 1px solid color-mix(in srgb, var(--a) 35%, var(--line)); backdrop-filter: blur(10px); overflow: hidden; transition: transform .25s, box-shadow .25s }
+    .ach-stats li::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 4px; background: var(--a) }
+    .ach-stats li:nth-child(2) { --a: var(--a2) }
+    .ach-stats li:nth-child(3) { --a: var(--a3) }
+    .ach-stats li:nth-child(4) { --a: var(--a4) }
+    @media (hover: hover) { .ach-stats li:hover { transform: translateY(-4px); box-shadow: 0 18px 34px -20px var(--a) } }
+    .ach-stats b { display: block; font-size: clamp(32px, 7vw, 54px); font-weight: 800; letter-spacing: -.04em; line-height: 1; color: color-mix(in srgb, var(--a) 80%, var(--ink)) }
+    .ach-stats span { display: block; margin-top: 8px; font-size: clamp(13px, 2.2vw, 16px); font-weight: 700; color: var(--mut) }
+    .ach-act { display: flex; align-items: center; gap: 12px; margin-top: 24px }
+    .ach-act .pill { background: var(--btn); color: var(--btn-ink); border: 0 }
+    .ach-go { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--a2) 16%, var(--bg)); color: var(--ink); border: 1px solid color-mix(in srgb, var(--a2) 35%, var(--line)); transition: transform .2s }
+    .ach-go:hover { transform: translate(2px, -2px) }
+    .ach-go svg { width: 22px; height: 22px }
+    .ach-line { flex: 1; min-width: 24px; margin-left: 14px; height: 2px; border: 0; border-radius: 2px; background: linear-gradient(90deg, var(--a2), transparent) }
+    .ach-notes { list-style: none; margin: 22px 0 0; padding: 16px 0 0; border-top: 1px solid color-mix(in srgb, var(--a2) 20%, var(--line)); display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--mut) }
+    .ach-notes li::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; border-radius: 50%; background: linear-gradient(135deg, var(--a1), var(--a2)) }
+    .ach-notes b { color: var(--ink) }
+    .ach.no-notes .ach-notes { display: none }
+    .ach.no-stats .ach-stats { display: none }
+    .ach.no-stats .ach-act { margin-top: 0 }
+    @media (max-width: 700px) {
+        .ach { border-radius: 26px }
+        .ach-top { padding: 26px 20px 4px }
+        .ach-card { padding: 18px 20px 24px }
+        .ach-stats { grid-template-columns: 1fr 1fr }
+        .ach-stats li:last-child:nth-child(odd) { grid-column: 1 / -1 }
+        .ach-act .pill { white-space: nowrap; padding: 12px 18px; font-size: 15px }
+        .ach-line { display: none }
+    }
+    
+    /* ---- 17. FOOTER ---------------------------------------------------------- */
+    
+    .foot {
+        border-top: 1px solid var(--line);
+        margin-top: 30px;
+        padding: 26px 0 40px;
+        color: var(--mut);
+        font-size: 13px
+    }
+    
+    .foot .contact {
+        margin-bottom: 18px
+    }
+    
+    /* ---- 18. CART PAGE: lines on the left, form on the right (>= 800 px) -------- */
+    
+    .cols {
+        display: grid;
+        gap: 22px
+    }
+    
+    @media(min-width:800px) {
+        .cols {
+            grid-template-columns: 1.2fr 1fr;
+            align-items: start
+        }
+    }
+    
+    .items {
+        list-style: none;
+        padding: 0;
+        margin: 0
+    }
+    
+    .it {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line)
+    }
+    
+    .th2 {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+        background: var(--tile);
+        flex: none;
+        overflow: hidden
+    }
+    
+    .th2 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+    }
+    
+    .ii {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px
+    }
+    
+    .lt {
+        text-align: right;
+        font-weight: 800;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px
+    }
+    
+    .empty2 {
+        text-align: center;
+        padding: 50px 0
+    }
+    
+    /* ---- 19. ABOUT PAGE: French and Arabic cards side by side (>= 800 px) -------
+       Arabic text uses the Tajawal font and is right-to-left (dir="rtl" in the HTML). */
+    
+    .about {
+        display: grid;
+        gap: 18px
+    }
+    
+    @media(min-width:800px) {
+        .about {
+            grid-template-columns: 1fr 1fr
+        }
+    }
+    
+    .card2 {
+        background: var(--tile);
+        border-radius: 28px;
+        padding: 26px
+    }
+    
+    .card2 p {
+        margin: 0 0 12px;
+        font-size: 17px
+    }
+    
+    .card2 [lang=ar],
+    .card2[lang=ar] {
+        font-family: Tajawal, Urbanist, sans-serif;
+        font-size: 19px;
+        line-height: 1.9
+    }
+    
+    /* ---- 21. ADMIN ONLY: toasts (little notifications, built by toast() in the admin page) ---- */
+    
+    /* ---- toasts ---- */
+    #toasts {
+        position: fixed;
+        top: calc(12px + env(safe-area-inset-top, 0px));
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(92vw, 420px);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 1100;
+        pointer-events: none
+    }
+    
+    .toast {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        color: #fff;
+        font: 700 15px/1.3 Urbanist, sans-serif;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(-12px);
+        transition: opacity .25s, transform .25s
+    }
+    
+    .toast.in {
+        opacity: 1;
+        transform: none
+    }
+    
+    .toast.ok {
+        background: #1f9d55
+    }
+    
+    .toast.del {
+        background: #d33
+    }
+    
+    .toast.err {
+        background: #b45309
+    }
+    
+    .toast .ti {
+        flex: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .25);
+        display: grid;
+        place-items: center;
+        font-size: 14px
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+        .toast {
+            transition: none
+        }
+    }
+    
+    /* ---- ADMIN ONLY: Yes/No confirmation toast (built by ask() in the admin page) ---- */
+    
+    /* ---- toast de confirmation Oui/Non ---- */
+    .toast.ask { background: #374151; cursor: default }
+    .toast .toast-msg { flex: 1 }
+    .toast .toast-btns { display: flex; gap: 8px; margin-left: auto }
+    .toast .toast-btns button {
+        font: 700 14px Urbanist, sans-serif;
+        padding: 6px 16px;
+        border-radius: 999px;
+        border: 1.5px solid #fff;
+        background: #fff;
+        color: #374151;
+        cursor: pointer
+    }
+    .toast .toast-btns button.no { 
+        background: none; color: #fff 
+    }
+    
+    
+    /* ---- 20. PRICE WITH DISCOUNT, PRODUCT HOVER, INVOICE PREVIEW, DEVELOPER CREDIT ---- */
+    
+    .pbox { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px }
+    .pold { display: flex; align-items: center; gap: 6px }
+    .pold s.old { font-weight: 600; font-size: 13px; color: var(--mut); text-decoration: line-through }
+    .off { background: #d33; color: #fff; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 999px }
+    
+    /* Hover animation on product cards (mouse devices only; off if the visitor prefers reduced motion) */
+    .p { transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s ease }
+    .p .tile { transition: box-shadow .35s ease }
+    .p .tile img { transition: transform .5s cubic-bezier(.2, .8, .2, 1) }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+        .p.rv.in:hover { transform: translateY(-8px) }
+        .p:hover .tile { box-shadow: 0 18px 34px -14px rgba(0, 0, 0, .38) }
+        .p:hover .tile img { transform: scale(1.09) }
+        .p:hover .add:not(:disabled) { transform: scale(1.08) }
+    }
+    
+    .sumr { display: flex; justify-content: space-between; color: var(--mut); font-size: 14px; margin: 6px 0 }
+    .inv { text-align: left; max-width: 560px; margin: 18px auto; border: 1px solid var(--line); border-radius: 18px; padding: 18px; background: var(--tile) }
+    .invh { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px }
+    .invh span { text-align: right; font-size: 13px; color: var(--mut) }
+    .tw2 { overflow-x: auto; margin: 10px 0 }
+    .inv table { width: 100%; border-collapse: collapse; font-size: 14px }
+    .inv th, .inv td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line) }
+    .inv th:nth-child(n+2), .inv td:nth-child(n+2) { text-align: right; white-space: nowrap }
+    .empty2 .pill { display: inline-block; margin: 4px }
+    
+    .foot .dev { margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap }
+    .foot .dev b { color: var(--ink) }
+    .foot .dev img { height: 22px; width: auto }
+    /* Developer logo: black on light pages, white on dark pages */
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .foot .dev img { filter: brightness(0) invert(1) }
+    }
+    :root[data-theme="dark"] .foot .dev img { filter: brightness(0) invert(1) }
+    
+    
+    
+    /* ---- 21. MODERN BUTTON HOVER ANIMATIONS ---------------------------------
+       Lift + soft shadow + a light sweep on .pill, outlined buttons fill in, small buttons grow, links slide their underline.
+       Mouse devices only (no sticky hover on phones) and switched off when the visitor prefers reduced motion. */
+    
+    .pill { position: relative; overflow: hidden; isolation: isolate; transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .25s ease, background-color .25s ease, color .25s ease, border-color .25s ease }
+    .pill:not(.out)::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .38) 50%, transparent 70%); transform: translateX(-130%); pointer-events: none }
+    .add, .chip, .cc, .menu-btn, .cart-ic, .cl, .qty button, .gal button, .sw button, .seg button { transition: transform .22s cubic-bezier(.2, .8, .2, 1), box-shadow .22s ease, background-color .22s ease, color .22s ease, border-color .22s ease }
+    .link { text-underline-offset: 3px; transition: text-underline-offset .22s ease, opacity .22s ease }
+    
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+        .pill:hover { transform: translateY(-3px); box-shadow: 0 14px 26px -12px color-mix(in srgb, var(--ink) 55%, transparent) }
+        .pill:not(.out):hover::after { transform: translateX(130%); transition: transform .7s ease }
+        .pill.out:hover { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+        .pill:active { transform: translateY(0) scale(.96); box-shadow: none; transition-duration: .08s }
+        .add:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 10px 20px -10px color-mix(in srgb, var(--ink) 55%, transparent) }
+        .chip:hover { transform: translateY(-2px) }
+        .cc:hover { transform: translateY(-4px); box-shadow: 0 14px 26px -14px color-mix(in srgb, var(--ink) 50%, transparent) }
+        .cart-ic:hover, .menu-btn:hover { transform: scale(1.1) }
+        .cl:hover { transform: rotate(90deg) scale(1.1) }
+        .qty button:hover, .gal button:hover, .sw button:hover { transform: scale(1.12) }
+        .seg button:hover { transform: translateY(-1px) }
+        .link:hover { text-underline-offset: 7px; opacity: .8 }
+    }
+    
+    
+    /* ---- 22. HOME: printer animation as a fixed background + cover that slides over it ----
+       .printer-bg = full-screen fixed layer behind everything (the machine stays at the top while the page scrolls).
+       .hero-txt = presentation text in front, on a frosted panel so it stays readable. .cover = the rest of the page and #ft,
+       with an opaque full-width background that scrolls over the machine. Smooth scrolling: html { scroll-behavior: smooth } (section 2) + js/home.js. */
+    
+    body[data-page="home"] { position: relative }
+    .printer-bg { position: fixed; inset: 0; z-index: 0; display: flex; align-items: center; justify-content: flex-end; padding-top: 64px; pointer-events: none; overflow: hidden }
+    .printer-bg[hidden], .printer-bg.off { display: none }
+    .printer-bg > div { width: min(1100px, max(100vw, 720px)); flex: none; margin-right: max(-20vw, -230px); opacity: .95 }
+    body[data-page="home"] .wrap { position: relative; z-index: 1 }
+    
+    .hero.hero-bg { grid-template-columns: 1fr; min-height: calc(100vh - 80px); min-height: calc(100svh - 80px); align-content: center; padding: 8px 0 90px; position: relative }
+    .hero-txt { max-width: 500px; padding: 8px 0 }
+    /* Phones: text on top, the machine below it (so it stays visible instead of hiding behind the text) */
+    @media (max-width: 799px) {
+        .hero.hero-bg { align-content: start; padding-top: 26px }
+        .printer-bg { justify-content: center; align-items: flex-end; padding: 0 0 7svh }
+        .printer-bg > div { width: 150vw; margin-right: 0; opacity: .9 }
+    }
+    
+    /* "Scroll down" button at the bottom of the banner */
+    .scroll-hint { position: absolute; left: 50%; bottom: 22px; width: 46px; height: 46px; margin-left: -23px; border-radius: 50%; display: grid; place-items: center; text-decoration: none; background: color-mix(in srgb, var(--bg) 70%, transparent); border: 1.5px solid var(--ink); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color .25s ease, transform .25s ease }
+    .scroll-hint span { width: 10px; height: 10px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(45deg) translate(-2px, -2px); animation: hintBob 1.8s ease-in-out infinite }
+    @keyframes hintBob { 0%, 100% { transform: rotate(45deg) translate(-3px, -3px) } 50% { transform: rotate(45deg) translate(2px, 2px) } }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .scroll-hint:hover { background: var(--ink); transform: translateY(-3px) } .scroll-hint:hover span { border-color: var(--bg) } }
+    @media (prefers-reduced-motion: reduce) { .scroll-hint span { animation: none } }
+    
+    /* Cover: full-width opaque background (a pseudo-element, because .wrap is only 1000 px wide) with a soft fade at its top edge */
+    .cover, body[data-page="home"] #ft { position: relative; z-index: 2; isolation: isolate }
+    .cover::before, body[data-page="home"] #ft::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; margin-left: -50vw; background: var(--bg); z-index: -1 }
+    .cover::after { content: ""; position: absolute; top: -64px; height: 64px; left: 50%; width: 100vw; margin-left: -50vw; background: linear-gradient(transparent, var(--bg)); z-index: -1; pointer-events: none }
+    .cover { padding-top: 8px }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
+    .hero-txt h1, .hero-txt p { text-shadow: 0 0 12px var(--bg), 0 0 6px var(--bg), 0 0 2px var(--bg) }   /* keeps the text readable when a floating G-code line passes behind it */
+    .hero-txt .pill { text-shadow: none }
+    
+    
+    /* ---- 23. COLOUR OF THE PIECE (cart line): "Identique à la photo" by default, optional swatches + colour picker ---- */
+    .cchoice { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 4px; font-size: 13px }
+    .ccur { display: inline-flex; align-items: center; gap: 6px; color: var(--mut) }
+    .ccur small { opacity: .8 }
+    .cdot-s { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--line); margin-right: 4px; vertical-align: -2px }
+    .ccur .cdot-s { margin-right: 0 }
+    .cmore { background: none; border: 0; padding: 0; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font: 700 13px inherit; font-family: inherit }
+    .cpanel { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px; border-radius: 16px; background: var(--tile) }
+    .cid { border: 1.5px solid var(--line); background: none; color: var(--ink); border-radius: 999px; padding: 5px 12px; font: 700 12px inherit; font-family: inherit; cursor: pointer }
+    .cid[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+    .cdot { width: 28px; height: 28px; padding: 0; border-radius: 50%; border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--line); cursor: pointer; transition: transform .2s cubic-bezier(.2, .8, .2, 1), box-shadow .2s ease }
+    .cdot[aria-pressed="true"] { box-shadow: 0 0 0 2.5px var(--ink) }
+    .cpk { position: relative; width: 28px; height: 28px; border-radius: 50%; overflow: hidden; cursor: pointer; display: grid; place-items: center; background: conic-gradient(#f33, #fc3, #3c6, #3cf, #36f, #c3f, #f33); box-shadow: 0 0 0 1px var(--line); transition: transform .2s cubic-bezier(.2, .8, .2, 1) }
+    .cpk.on { box-shadow: 0 0 0 2.5px var(--ink) }
+    .cpk input { position: absolute; inset: -6px; width: 40px; height: 40px; opacity: 0; cursor: pointer; padding: 0; border: 0 }
+    .cpk span { color: #fff; font-weight: 800; font-size: 16px; line-height: 1; text-shadow: 0 0 3px rgba(0, 0, 0, .6); pointer-events: none }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .cdot:hover, .cpk:hover { transform: scale(1.18) } }
+    
+    /* ---- Best sellers: swipeable cards (home page) ------------------------------------------------------
+       #bestGrid.swipe = one row you slide sideways (scroll-snap). The next card peeks out so people see it moves.
+       .sw-btn = arrows, shown only with a mouse (hover devices); .single on the wrapper hides them. */
+    .swipe-wrap { position: relative }
+    .swipe {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 6px 2px 18px;
+        margin: 0 -2px
+    }
+    .swipe::-webkit-scrollbar { display: none }
+    .swipe > .p {
+        flex: 0 0 min(72%, 250px);
+        scroll-snap-align: start;
+        background: var(--tile);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 12px;
+        box-shadow: 0 6px 18px #00000012
+    }
+    .swipe > .notice { flex: 1 0 100% }
+    .swipe:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 20px }
+    .sw-btn {
+        display: none;
+        position: absolute;
+        top: 38%;
+        width: 42px;
+        height: 42px;
+        padding: 0 0 3px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        box-shadow: 0 4px 14px #0000002a
+    }
+    .sw-btn.prev { left: -10px }
+    .sw-btn.next { right: -10px }
+    @media (hover: hover) and (min-width: 760px) { .sw-btn { display: block } .swipe-wrap.single .sw-btn { display: none } }
+    @media (min-width: 760px) { .swipe > .p { flex-basis: 240px } }
+    
+    /* Message when nothing can be bought (sold out / empty shop / empty category) */
+    .notice {
+        grid-column: 1 / -1;
+        margin: 0;
+        padding: 16px 18px;
+        border: 1px dashed var(--line);
+        border-radius: 18px;
+        background: var(--tile);
+        color: var(--ink);
+        font-size: 15px;
+        line-height: 1.5
+    }
+    .notice a { text-decoration: underline; font-weight: 700 }
+    
+    /* ---- Customer review screenshots: smaller cards (tap = full size popup, see reviews.js) ---------- */
+    .rc { width: 118px; border-radius: 16px }
+    .rc img { max-height: 230px }
+    .rtrack { gap: 12px; padding: 16px 12px 16px 0 }
+    dialog.rdlg { max-width: min(94vw, 520px) }
+    
+    /* ---- Service rating (home page) -------------------------------------------------------------------- */
+    .fb-sum { font-size: 15px; color: var(--mut) }
+    .fb-sum b { color: var(--ink) }
+    .stars-ro { color: var(--star); letter-spacing: 2px }
+    .fb { display: grid; gap: 22px; align-items: start }
+    @media (min-width: 760px) { .fb { grid-template-columns: minmax(280px, 380px) 1fr } }
+    .fb-form { padding: 20px; border: 1px solid var(--line); border-radius: 24px; background: var(--tile) }
+    .fb-form small { font-weight: 400; color: var(--mut) }
+    .stars { border: 0; padding: 0; margin: 0 0 10px }
+    .stars legend { font-weight: 700; font-size: 14px; padding: 0; margin-bottom: 6px }
+    .stars-row { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 2px }
+    .stars-row input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; padding: 0; border: 0 }
+    .stars-row label { margin: 0; font-size: 38px; line-height: 1; color: var(--line); cursor: pointer; padding: 0 2px; transition: transform .15s }
+    .stars-row label:hover, .stars-row label:hover ~ label, .stars-row input:checked ~ label { color: var(--star) }
+    .stars-row label:hover { transform: scale(1.12) }
+    .stars-row input:focus-visible + label { outline: 2px solid var(--ink); border-radius: 6px }
+    .fb-word { min-height: 24px; margin: 6px 0 0; font-size: 15px; font-weight: 700; color: var(--ink) }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0 }
+    .fb-msg { display: block; margin-top: 10px; font-size: 14px; color: var(--mut) }
+    .fb-msg.ok { color: #1a8a4a; font-weight: 700 }
+    .fb-msg.err { color: #d33 }
+    .fb-list { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) }
+    .fb-card { margin: 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--bg) }
+    .fb-card blockquote { margin: 6px 0 8px; font-size: 15px; line-height: 1.45; overflow-wrap: anywhere }
+    .fb-card figcaption { font-size: 13px; color: var(--mut) }
+    
+    
+    /* ---- 22. SMALL NOTIFICATION (notify() in js/ui.js) + STICKY CART BAR (phones) ----------------------------- */
+    
+    #pt { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30; display: grid; gap: 8px; width: max-content; max-width: calc(100vw - 28px); pointer-events: none }
+    .nt { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 16px; background: var(--btn); color: var(--btn-ink); font-size: 14px; font-weight: 700; box-shadow: 0 10px 30px #0004; opacity: 0; transform: translateY(12px); transition: opacity .25s, transform .25s; pointer-events: auto }
+    .nt.in { opacity: 1; transform: none }
+    .nt a { color: inherit; white-space: nowrap; text-underline-offset: 3px }
+    
+    .cartbar { display: none }
+    @media (max-width: 700px) {
+        .cartbar { position: fixed; left: 14px; right: 14px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-radius: 18px; background: var(--btn); color: var(--btn-ink); font-weight: 700; text-decoration: none; box-shadow: 0 10px 30px #0004 }
+        .cartbar[hidden] { display: none }
+        body.has-cbar .foot { margin-bottom: 78px }
+        body.has-cbar #pt { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) }
+    }
+    
+    /* ---- 23. HEADER THEME BUTTON, FAVOURITE HEART, SORT MENU, SKELETONS, FOOTER LINKS ----------------------------- */
+    
+    .theme-btn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 12px; background: none; color: var(--ink); cursor: pointer }
+    .theme-btn:hover { background: var(--tile) }
+    
+    .p { position: relative }
+    .fav { position: absolute; top: 10px; right: 10px; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; padding: 0; background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: var(--ink); cursor: pointer; transition: transform .2s }
+    .fav svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round }
+    .fav[aria-pressed="true"] { color: #e0245e }
+    .fav[aria-pressed="true"] svg { fill: currentColor; animation: favPop .35s ease }
+    @keyframes favPop { 50% { transform: scale(1.35) } }
+    @media (hover: hover) { .fav:hover { transform: scale(1.1) } }
+    
+    a.add { display: inline-block; text-align: center; text-decoration: none }
+    .qb .pill.add { padding: 12px 26px }
+    
+    
+    .sk .tile, .tile.sk, .sk i, .sk-line { background: linear-gradient(100deg, var(--tile) 30%, color-mix(in srgb, var(--tile) 65%, var(--bg)) 50%, var(--tile) 70%) 0 0 / 200% 100%; animation: skShine 1.3s linear infinite }
+    .sk i { display: block; width: 80%; height: 14px; margin-top: 10px; border-radius: 8px }
+    .sk i + i { width: 45% }
+    .sk-line { height: 22px; margin-bottom: 14px; border-radius: 10px }
+    .sk-line.short { width: 40% }
+    @keyframes skShine { to { background-position: -200% 0 } }
+    @media (prefers-reduced-motion: reduce) { .sk .tile, .tile.sk, .sk i, .sk-line { animation: none } }
+    
+    .flinks { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 14px }
+    .flinks a { color: var(--mut); text-underline-offset: 3px }
+    .flinks a:hover { color: var(--ink) }
+    .cc b svg { width: 22px; height: 22px }
+    
+    /* ---- 24. PRODUCT PAGE, ORDER TRACKING, FAQ -------------------------------------------------------------------- */
+    
+    .pp-grid { display: grid; gap: 26px }
+    .pp-media .tile { cursor: default }
+    .pp-info h1 { margin: 6px 0 10px; font-size: clamp(28px, 5vw, 42px) }
+    .crumb { margin: 0; font-size: 14px; color: var(--mut) }
+    .crumb a { color: inherit }
+    .pp-price { margin: 14px 0 }
+    .pp-price .price { font-size: 30px }
+    .pp-desc { margin: 0 0 18px; color: var(--mut); line-height: 1.6 }
+    .pp-act { display: flex; flex-wrap: wrap; align-items: center; gap: 10px }
+    .pp-act .fav { position: static; width: 48px; height: 48px; background: var(--tile) }
+    .pp-note { margin-top: 18px; color: var(--mut); font-size: 14px }
+    .more { display: inline-block; margin-top: 14px; color: var(--ink); font-weight: 700; text-underline-offset: 3px }
+    @media (min-width: 800px) { .pp-grid { grid-template-columns: 1fr 1fr; align-items: start; gap: 44px } }
+    
+    .trk { max-width: 520px; margin-top: 24px; padding: 22px; border-radius: 22px; background: var(--tile) }
+    .trk-h { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 18px }
+    .trk-h span { color: var(--mut) }
+    .steps { counter-reset: s; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 14px; padding: 0; list-style: none }
+    .steps li { position: relative; padding-top: 32px; text-align: center; font-size: 13px; font-weight: 700; color: var(--mut) }
+    .steps li::before { content: counter(s); counter-increment: s; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 1; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--line); color: var(--ink); font-size: 12px }
+    .steps li::after { content: ""; position: absolute; top: 11px; left: calc(-50% + 16px); right: calc(50% + 16px); height: 2px; background: var(--line) }
+    .steps li:first-child::after { display: none }
+    .steps li.on { color: var(--ink) }
+    .steps li.on::before, .steps li.on::after { background: var(--btn); color: var(--btn-ink) }
+    .trk-s { margin: 0 0 14px }
+    .trk-l { margin: 0 0 14px; padding-left: 18px; color: var(--mut) }
+    
+    .faq { display: grid; gap: 10px }
+    .faq-i { padding: 0 20px; border-radius: 18px; background: var(--tile) }
+    .faq-i summary { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0; font-weight: 700; cursor: pointer; list-style: none }
+    .faq-i summary::-webkit-details-marker { display: none }
+    .faq-i summary::after { content: "+"; font-size: 22px; line-height: 1; transition: transform .2s }
+    .faq-i[open] summary::after { transform: rotate(45deg) }
+    .faq-i p { margin: 0 0 16px; color: var(--mut) }
+    
+    /* ---- 25. QUICK VIEW AS A BOTTOM SHEET ON PHONES ----------------------------------------------------------- */
+    
+    @media (max-width: 700px) {
+        dialog#qv { margin: auto 0 0; width: 100%; max-width: 100%; max-height: 88vh; border-radius: 28px 28px 0 0; animation: sheetUp .3s ease both }
+    }
+    @keyframes sheetUp { from { transform: translateY(100%) } to { transform: none } }
+    @media (prefers-reduced-motion: reduce) { dialog#qv { animation: none } }
+    
+    
+    /* ---- 23. PRODUCTS TOOLBAR (search + sort dropdown + categories) and SCROLLBAR ----------------
+       Search and dropdown share the first row; the categories sit on their own row below with real breathing room. */
+    .tools { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; margin: 22px 0 32px; padding: 16px; border-radius: 26px; background: var(--tile); border: 1px solid var(--line) }
+    .tools input { grid-column: 1; width: 100%; min-width: 0; padding: 13px 20px 13px 46px; border: 1.5px solid transparent; background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") 17px 50% / 18px no-repeat; transition: border-color .2s, box-shadow .2s }
+    .tools input:focus { outline: 0; border-color: var(--acc); box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 18%, transparent) }
+    .tools > select { display: none }
+    .chips { grid-column: 1 / -1; padding: 4px 2px 8px; margin: 0 -2px; gap: 10px; flex-wrap: wrap; overflow: visible }
+    .chip { border: 1.5px solid var(--line); background: var(--bg); box-shadow: none; padding: 9px 20px }
+    .chip:hover { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 8%, var(--bg)); box-shadow: none }
+    .chip[aria-pressed="true"] { background: var(--btn); border-color: var(--btn); color: var(--btn-ink); box-shadow: 0 2px 5px rgba(0, 0, 0, .12) }
+    @media (max-width: 560px) {
+        .tools { grid-template-columns: 1fr; padding: 12px; gap: 12px; margin: 16px 0 26px }
+        .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none }
+        .chips::-webkit-scrollbar { display: none }
+    }
+    
+    /* Custom dropdown (built by enhanceSelect() in js/shop.js on top of the real <select>, which stays the source of truth) */
+    .dd { position: relative; min-width: 230px }
+    .dd-btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 13px 18px 13px 20px; border: 1.5px solid transparent; border-radius: 999px; background: var(--bg); color: var(--ink); font: 700 15px Urbanist, system-ui, sans-serif; cursor: pointer; transition: border-color .2s, box-shadow .2s }
+    .dd-btn:hover, .dd.open .dd-btn { border-color: var(--acc) }
+    .dd-btn:focus-visible { outline: 0; box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 22%, transparent) }
+    .dd-btn svg { width: 18px; height: 18px; flex: none; transition: transform .25s }
+    .dd.open .dd-btn svg { transform: rotate(180deg) }
+    .dd-menu { position: absolute; z-index: 30; right: 0; top: calc(100% + 8px); min-width: 100%; margin: 0; padding: 8px; list-style: none; border-radius: 20px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 24px 50px -18px rgba(0, 0, 0, .25); opacity: 0; transform: translateY(-6px) scale(.98); transform-origin: top right; pointer-events: none; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s }
+    .dd.open .dd-menu { opacity: 1; transform: none; pointer-events: auto; visibility: visible }
+    .dd-menu li { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 14px; border-radius: 14px; font-weight: 600; font-size: 15px; white-space: nowrap; cursor: pointer }
+    .dd-menu li:hover, .dd-menu li.act { background: color-mix(in srgb, var(--acc) 10%, transparent) }
+    .dd-menu li[aria-selected="true"] { color: var(--acc); font-weight: 800 }
+    .dd-menu li[aria-selected="true"]::after { content: ""; width: 7px; height: 12px; margin-top: -3px; border: solid currentColor; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) }
+    @media (max-width: 560px) { .dd { min-width: 0 } .dd-menu { left: 0; right: 0 } }
+    
+    /* Scrollbar: slim, rounded, colour-matched (page + every scrollable box). Firefox uses scrollbar-color/width, Chrome/Safari/Edge ::-webkit-scrollbar. */
+    html { scrollbar-width: thin; scrollbar-color: var(--acc2) transparent }
+    * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--acc) 55%, var(--bg)) transparent }
+    ::-webkit-scrollbar { width: 12px; height: 12px }
+    ::-webkit-scrollbar-track { background: transparent }
+    ::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 999px; background: linear-gradient(180deg, var(--acc2), var(--acc)) padding-box; min-height: 40px }
+    ::-webkit-scrollbar-thumb:hover { background: var(--acc) padding-box }
+    ::-webkit-scrollbar-corner { background: transparent }
+    
+    
+    /* ---- 24. BACKGROUND ART + ACCENT COLOURS ---------------------------------------------------------
+       Palette: white, black, gray and navy blue. --acc / --acc2 = navy accents (scrollbar, dropdown, focus rings, achievements); dark mode uses lighter navy.
+       --bgart = blurred gray circles, rings and waves: white page with gray shades (light theme), black page with white/gray shades (dark theme).
+       The blur is built into the picture: change stdDeviation inside the url(...) values (%3D%2218%22 = 18) for more/less blur; lower the opacities to tone it down. */
+    :root { --acc: #1f3a5f; --acc2: #3d5a85; --bgart: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20900%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22b%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22125%25%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2218%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Cg%20filter%3D%22url%28%23b%29%22%3E%3Ccircle%20cx%3D%221280%22%20cy%3D%22120%22%20r%3D%22240%22%20fill%3D%22%236b7280%22%20opacity%3D%220.10%22%2F%3E%3Ccircle%20cx%3D%221280%22%20cy%3D%22120%22%20r%3D%22160%22%20fill%3D%22none%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%223%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%22470%22%20r%3D%22180%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%221390%22%20cy%3D%22560%22%20r%3D%2280%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22180%22%20cy%3D%2290%22%20r%3D%2234%22%20fill%3D%22%23d1d5db%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22760%22%20cy%3D%22300%22%20r%3D%2214%22%20fill%3D%22%236b7280%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22560%22%20cy%3D%2280%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%239ca3af%22%20stroke-width%3D%222.5%22%20opacity%3D%220.22%22%2F%3E%3Cpath%20d%3D%22M0%20760C220%20690%20380%20850%20620%20770S1080%20830%201440%20740V1000H0Z%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.10%22%2F%3E%3Cpath%20d%3D%22M0%20810C250%20750%20420%20880%20680%20815S1120%20860%201440%20800V1000H0Z%22%20fill%3D%22%236b7280%22%20opacity%3D%220.14%22%2F%3E%3Cpath%20d%3D%22M0%20860C280%20820%20480%20900%20760%20860S1200%20890%201440%20850V1000H0Z%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.16%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --veil: #fff }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --acc: #8fb0e0; --acc2: #5f7fb0; --bgart: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20900%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22b%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22125%25%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2218%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Cg%20filter%3D%22url%28%23b%29%22%3E%3Ccircle%20cx%3D%221280%22%20cy%3D%22120%22%20r%3D%22240%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.10%22%2F%3E%3Ccircle%20cx%3D%221280%22%20cy%3D%22120%22%20r%3D%22160%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%22470%22%20r%3D%22180%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%221390%22%20cy%3D%22560%22%20r%3D%2280%22%20fill%3D%22%23d1d5db%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22180%22%20cy%3D%2290%22%20r%3D%2234%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22760%22%20cy%3D%22300%22%20r%3D%2214%22%20fill%3D%22%23d1d5db%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22560%22%20cy%3D%2280%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%239ca3af%22%20stroke-width%3D%222.5%22%20opacity%3D%220.22%22%2F%3E%3Cpath%20d%3D%22M0%20760C220%20690%20380%20850%20620%20770S1080%20830%201440%20740V1000H0Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.10%22%2F%3E%3Cpath%20d%3D%22M0%20810C250%20750%20420%20880%20680%20815S1120%20860%201440%20800V1000H0Z%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.14%22%2F%3E%3Cpath%20d%3D%22M0%20860C280%20820%20480%20900%20760%20860S1200%20890%201440%20850V1000H0Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --veil: #000 } }
+    :root[data-theme="dark"] { --acc: #8fb0e0; --acc2: #5f7fb0; --bgart: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20900%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22b%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22125%25%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2218%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Cg%20filter%3D%22url%28%23b%29%22%3E%3Ccircle%20cx%3D%221280%22%20cy%3D%22120%22%20r%3D%22240%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.10%22%2F%3E%3Ccircle%20cx%3D%221280%22%20cy%3D%22120%22%20r%3D%22160%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%22470%22%20r%3D%22180%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%221390%22%20cy%3D%22560%22%20r%3D%2280%22%20fill%3D%22%23d1d5db%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22180%22%20cy%3D%2290%22%20r%3D%2234%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22760%22%20cy%3D%22300%22%20r%3D%2214%22%20fill%3D%22%23d1d5db%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22560%22%20cy%3D%2280%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%239ca3af%22%20stroke-width%3D%222.5%22%20opacity%3D%220.22%22%2F%3E%3Cpath%20d%3D%22M0%20760C220%20690%20380%20850%20620%20770S1080%20830%201440%20740V1000H0Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.10%22%2F%3E%3Cpath%20d%3D%22M0%20810C250%20750%20420%20880%20680%20815S1120%20860%201440%20800V1000H0Z%22%20fill%3D%22%239ca3af%22%20opacity%3D%220.14%22%2F%3E%3Cpath%20d%3D%22M0%20860C280%20820%20480%20900%20760%20860S1200%20890%201440%20850V1000H0Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --veil: #000 }
+    /* Performance: the blurred art is ONE viewport-sized fixed layer (composited by the GPU, never repainted while scrolling).
+       The old "background-attachment: fixed" on body + .cover + #ft forced a full repaint of a huge blurred picture on every scroll frame. */
+    body { background: var(--veil) }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--bgart) center / cover no-repeat }
+    .cover::before, body[data-page="home"] #ft::before { background: var(--veil) }
+    .cover::after { background: linear-gradient(transparent, var(--veil)) }
+    
+    
+    
+    
+    /* ---- 25. HEADER: ONE definition (replaces 4 older conflicting versions + their !important) ----------------
+       The glass blur lives on ::before, NOT on the header itself: a backdrop-filter on the header would turn it into the
+       containing block of the position:fixed slide-out menu and break it on phones. */
+    .scrim { display: none }
+    #hd { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 1000; width: 100%; background: transparent }
+    #hd > header {
+        position: relative;
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
+        gap: 8px 12px; min-width: 0; max-width: 1200px; margin: 10px auto 0; padding: 8px 18px;
+        border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); border-radius: 999px;
+        background: transparent; box-shadow: 0 8px 30px #00000012; overflow: visible;
+        -webkit-backdrop-filter: none; backdrop-filter: none
+    }
+    #hd > header::before {
+        content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+        background: color-mix(in srgb, var(--bg) 74%, transparent);
+        -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%)
+    }
+    #hd .logo { flex: 0 0 auto }
+    #hd .hact { flex: 0 0 auto; margin-left: auto }
+    #hd nav a { transition: background-color .2s ease, color .2s ease }
+    
+    @media (min-width: 701px) {
+        #hd nav { flex: 1 1 auto; justify-content: flex-end; align-items: center; overflow: visible }
+        #hd .cart-ic, #hd .menu-btn { display: none }
+        #hd nav a.nav-cart { display: inline-flex; align-items: center }
+    }
+    @media (min-width: 701px) and (max-width: 900px) { #hd nav a { padding: 8px 10px; font-size: 13.5px } }
+    
+    @media (max-width: 700px) {
+        #hd > header { margin: 6px 0 0; padding: 6px 8px 6px 12px; border-radius: 24px }
+        #hd .logo img { height: 38px; width: auto }
+        #hd .cart-ic { display: inline-flex }
+        #hd nav a.nav-cart { display: none }
+        #hd .menu-btn {
+            display: inline-flex; flex: 0 0 44px; flex-direction: column; align-items: stretch; justify-content: center; gap: 5px;
+            position: relative; z-index: 1002; width: 44px; height: 44px; padding: 0 11px;
+            border: 0; border-radius: 12px; background: transparent; color: var(--ink); cursor: pointer
+        }
+        #hd .menu-btn span { display: block; height: 2px; border-radius: 2px; background: var(--ink); transition: transform .25s ease, opacity .2s ease }
+        body.menu-open #hd .menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg) }
+        body.menu-open #hd .menu-btn span:nth-child(2) { opacity: 0 }
+        body.menu-open #hd .menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg) }
+    
+        #hd nav {
+            position: fixed; inset: 0 0 0 auto; z-index: 1001; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 4px;
+            width: min(320px, 86vw); max-width: none; height: 100dvh; margin: 0;
+            padding: calc(env(safe-area-inset-top, 0px) + 76px) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+            overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+            border-left: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 92%, transparent);
+            box-shadow: -12px 0 40px #0004;
+            transform: translate3d(105%, 0, 0); visibility: hidden; pointer-events: none;
+            transition: transform .32s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .32s
+        }
+        body.menu-open #hd nav { -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: blur(22px) saturate(140%); transform: none; visibility: visible; pointer-events: auto; transition: transform .32s cubic-bezier(.2, .8, .2, 1), visibility 0s }
+        #hd nav a { display: block; flex: 0 0 auto; width: 100%; padding: 14px 16px; white-space: normal; font-size: 17px; text-align: left; border-radius: 12px }
+        #hd .scrim {
+            display: block; position: fixed; inset: 0; z-index: 1000; background: #0008; opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity .3s ease, visibility 0s linear .3s
+        }
+        body.menu-open #hd .scrim { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .3s ease, visibility 0s }
+        body.menu-open { overflow: hidden }
+    }
+    
+    /* ---- 26. POLISH: responsiveness, touch comfort, smoothness, accessibility ------------------------------------ */
+    
+    /* Native controls / scrollbars follow the real theme (also when forced with data-theme) */
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark } }
+    :root[data-theme="dark"] { color-scheme: dark }
+    
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100% }
+    body { min-height: 100vh; min-height: 100dvh; padding-top: env(safe-area-inset-top, 0px); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility }
+    img, svg, video { max-width: 100% }
+    a, button, input, select, textarea, summary { -webkit-tap-highlight-color: transparent }
+    button, .pill, .chip, .add, summary { touch-action: manipulation }
+    
+    /* Fluid spacing and titles instead of fixed pixel values */
+    .wrap { padding-inline: clamp(16px, 4vw, 28px) }
+    section { padding-block: clamp(22px, 4vw, 38px) }
+    h2 { font-size: clamp(22px, 4vw, 30px) }
+    .grid { gap: clamp(16px, 3vw, 26px) clamp(10px, 2vw, 18px) }
+    @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr) } }
+    @media (min-width: 900px) { .grid { grid-template-columns: repeat(4, 1fr) } }
+    .head { flex-wrap: wrap; gap: 6px 14px }
+    
+    /* Keyboard focus: the old yellow ring was almost invisible on white */
+    :focus-visible { outline: 3px solid var(--acc); outline-offset: 3px; border-radius: 8px }
+    .pill:focus-visible, .chip:focus-visible, .add:focus-visible { border-radius: 999px }
+    
+    /* Forms: checkboxes/radios were stretched to 100% width by the global input rule */
+    input[type="checkbox"], input[type="radio"] { width: auto; margin: 0 8px 0 0; padding: 0; accent-color: var(--acc) }
+    input, textarea { transition: border-color .2s ease, box-shadow .2s ease }
+    input:focus, textarea:focus { outline: 0; border-color: var(--acc); box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 18%, transparent) }
+    .form { padding: clamp(18px, 4vw, 28px) }
+    
+    /* Bigger touch targets (>= 36px) */
+    .qty button { width: 36px; height: 36px; font-size: 17px }
+    .add { min-height: 36px; padding: 8px 16px }
+    .gal button { width: 60px; height: 60px }
+    
+    /* Smoother scroll reveal (eased + light stagger inside grids); content stays visible if JS is off */
+    .rv { transition: opacity .7s cubic-bezier(.2, .8, .2, 1), transform .7s cubic-bezier(.2, .8, .2, 1) }
+    .grid > .rv:nth-child(4n+2) { transition-delay: .06s }
+    .grid > .rv:nth-child(4n+3) { transition-delay: .12s }
+    .grid > .rv:nth-child(4n) { transition-delay: .18s }
+    @media (scripting: none) { .rv { opacity: 1; transform: none } }
+    
+    /* Product cards: GPU-friendly hover only while hovering */
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .p:hover .tile img { will-change: transform } }
+    
+    /* Dialogs: dynamic-viewport height, soft blur, gentle entrance */
+    dialog { max-height: 92vh; max-height: 92dvh; overscroll-behavior: contain }
+    dialog[open] { animation: dlgIn .28s cubic-bezier(.2, .8, .2, 1) }
+    @keyframes dlgIn { from { opacity: 0; transform: translateY(12px) scale(.98) } }
+    @media (max-width: 700px) { dialog#qv { max-height: 88vh; max-height: 88dvh } }
+    
+    /* Footer keeps clear of the iPhone home bar */
+    .foot { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)) }
+    
+    /* Very small phones */
+    @media (max-width: 380px) {
+        .pill { padding: 13px 22px; font-size: 15px }
+        .grid { gap: 14px 8px }
+        .tile { border-radius: 20px }
+        .qb { padding: 16px 16px 20px }
+        .ach-top { padding-inline: 16px }
+        .ach-card { padding-inline: 16px }
+    }
+    
+    /* Large screens: a little more room for the page column */
+    @media (min-width: 1280px) { .wrap { max-width: 1100px } }
+    
+    /* Colour swatches (custom-order page): wrap onto several rows and stay round.
+       Before, 16+ swatches were squeezed into ovals and pushed the page wider than the phone screen. */
+    .sw { flex-wrap: wrap; gap: 12px }
+    .sw button { flex: none; width: 38px; height: 38px; aspect-ratio: 1 }
+    
+    
+    /* ---- 27. MORE BLURRED BACKGROUND TEXTURE (every page) ---------------------------------------------------------
+       --blobs = soft out-of-focus colour clouds (radial gradients are blurry by nature, so no costly blur filter) in the navy/gray accents, and
+       --grain = a very fine noise that gives the blur a frosted texture. Both follow light / dark mode through --acc, --acc2 and --mut.
+       Normal pages: ONE fixed layer (body::after, drawn above the circles/waves of section 24). Home page: the opaque "cover" gets the same clouds
+       repeated down its height, so the texture also shows behind every section and the footer.
+       Stronger / softer: change the percentages (16%, 14%...) in --blobs or the .09 in --grain. */
+    :root {
+        --blobs:
+            radial-gradient(560px 460px at 6% 10%, color-mix(in srgb, var(--acc) 17%, transparent), transparent 72%),
+            radial-gradient(680px 520px at 96% 22%, color-mix(in srgb, var(--acc2) 15%, transparent), transparent 72%),
+            radial-gradient(520px 420px at 14% 58%, color-mix(in srgb, var(--mut) 17%, transparent), transparent 72%),
+            radial-gradient(620px 480px at 90% 78%, color-mix(in srgb, var(--acc) 13%, transparent), transparent 72%),
+            radial-gradient(360px 300px at 52% 42%, color-mix(in srgb, var(--acc2) 10%, transparent), transparent 72%),
+            radial-gradient(420px 340px at 40% 96%, color-mix(in srgb, var(--mut) 14%, transparent), transparent 72%);
+        --grain: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27180%27%20height%3D%27180%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%20.5%20%200%200%200%200%20.5%20%200%200%200%200%20.5%20%200%200%200%20.2%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23n%29%27%2F%3E%3C%2Fsvg%3E")
+    }
+    body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--grain) 0 0 / 180px 180px, var(--blobs) center / cover no-repeat }
+    .cover::before, body[data-page="home"] #ft::before { background: var(--grain) 0 0 / 180px 180px, var(--blobs) 0 0 / 100% 1100px repeat-y, var(--veil) }
+
+    /* Frosted-glass surfaces so the texture shows through the cards (blur only on a few big boxes, to stay light on phones) */
+    .form, .inv, .card2, .cc, .empty2, .card { background: color-mix(in srgb, var(--tile) 68%, transparent); -webkit-backdrop-filter: blur(14px) saturate(130%); backdrop-filter: blur(14px) saturate(130%); border: 1px solid color-mix(in srgb, var(--ink) 7%, transparent) }
+    .it { border-bottom-color: color-mix(in srgb, var(--ink) 9%, transparent) }
+
+    /* ---- 28. UI POLISH ----------------------------------------------------------------------------------------------- */
+    /* Product tiles: soft lift on hover (devices with a mouse only) */
+    .tile { box-shadow: 0 1px 2px #0000000d; transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .25s ease }
+    @media (hover: hover) { .p:hover .tile { transform: translateY(-3px); box-shadow: 0 18px 34px -18px #00000040 } }
+    .pill { transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease }
+    @media (hover: hover) { .pill:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -12px #00000055 } }
+    .pill:active, .add:active { transform: scale(.97) }
+
+    /* Messages: red = error, green = confirmation (both readable in dark mode) */
+    .note.err { color: color-mix(in srgb, #d33322 82%, var(--ink)); font-weight: 600 }
+    .note.ok { color: color-mix(in srgb, #1f9d55 78%, var(--ink)); font-weight: 600 }
+
+    /* Cart: promo code box + discount line */
+    .promo { display: flex; gap: 8px; align-items: stretch }
+    .promo input { flex: 1 1 auto; min-width: 0; margin: 0; text-transform: uppercase; letter-spacing: .6px; font-weight: 700 }
+    .promo .pill { flex: none; padding: 0 18px; font-size: 14px }
+    .pchip { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 14px; border-radius: 14px; background: color-mix(in srgb, #1f9d55 14%, transparent); border: 1px dashed color-mix(in srgb, #1f9d55 60%, transparent); font-size: 15px }
+    .pchip .link { border: 0; background: none; padding: 0; color: var(--mut); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px }
+    .sumr.disc { color: color-mix(in srgb, #1f9d55 80%, var(--ink)); font-weight: 700 }
+    #pcm:empty { display: none }
+    @media (max-width: 420px) { .promo { flex-direction: column } .promo .pill { padding: 12px 18px } }
+
+    @media (prefers-reduced-motion: reduce) { .tile, .pill { transition: none } .p:hover .tile, .pill:hover { transform: none } }
+
+    /* Notifications on the public pages: above the sticky header (z-index 1000) and the slide-out menu */
+    #toasts { z-index: 3000 }
+
+    /* ---- 28. BACKGROUND: blur shapes + soft gradient glow (no grain, no bottom box) ---------------------------------- */
+    :root {
+        --gk: 24%; --gk2: 32%;
+        --art: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-10%' y='-10%' width='120%' height='125%'><feGaussianBlur stdDeviation='18'/></filter></defs><g filter='url(%23b)'><circle cx='1280' cy='120' r='240' fill='%236b7280' opacity='.10'/><circle cx='1280' cy='120' r='160' fill='none' stroke='%236b7280' stroke-width='3' opacity='.18'/><circle cx='60' cy='470' r='180' fill='%239ca3af' opacity='.16'/><circle cx='1390' cy='560' r='80' fill='%239ca3af' opacity='.22'/><circle cx='180' cy='90' r='34' fill='%23d1d5db' opacity='.30'/><circle cx='760' cy='300' r='14' fill='%236b7280' opacity='.22'/><circle cx='560' cy='80' r='110' fill='none' stroke='%239ca3af' stroke-width='2.5' opacity='.22'/></g></svg>");
+    }
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --gk: 58%; --gk2: 72%;
+            --art: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-10%' y='-10%' width='120%' height='125%'><feGaussianBlur stdDeviation='18'/></filter></defs><g filter='url(%23b)'><circle cx='1280' cy='120' r='240' fill='%23ffffff' opacity='.10'/><circle cx='1280' cy='120' r='160' fill='none' stroke='%23ffffff' stroke-width='3' opacity='.18'/><circle cx='60' cy='470' r='180' fill='%239ca3af' opacity='.16'/><circle cx='1390' cy='560' r='80' fill='%23d1d5db' opacity='.22'/><circle cx='180' cy='90' r='34' fill='%23ffffff' opacity='.30'/><circle cx='760' cy='300' r='14' fill='%23d1d5db' opacity='.22'/><circle cx='560' cy='80' r='110' fill='none' stroke='%239ca3af' stroke-width='2.5' opacity='.22'/></g></svg>");
+        }
+    }
+    :root[data-theme="dark"] {
+        --gk: 58%; --gk2: 72%;
+        --art: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-10%' y='-10%' width='120%' height='125%'><feGaussianBlur stdDeviation='18'/></filter></defs><g filter='url(%23b)'><circle cx='1280' cy='120' r='240' fill='%23ffffff' opacity='.10'/><circle cx='1280' cy='120' r='160' fill='none' stroke='%23ffffff' stroke-width='3' opacity='.18'/><circle cx='60' cy='470' r='180' fill='%239ca3af' opacity='.16'/><circle cx='1390' cy='560' r='80' fill='%23d1d5db' opacity='.22'/><circle cx='180' cy='90' r='34' fill='%23ffffff' opacity='.30'/><circle cx='760' cy='300' r='14' fill='%23d1d5db' opacity='.22'/><circle cx='560' cy='80' r='110' fill='none' stroke='%239ca3af' stroke-width='2.5' opacity='.22'/></g></svg>");
+    }
+    /* Soft out-of-focus gradient glow (diagonal light, like a gradient poster), built from the project colours --acc / --acc2 / --mut.
+       Light mode = pale navy/gray tints on white, dark mode = brighter glow on black. Stronger / softer: change --gk and --gk2 above. */
+    :root {
+        --glow:
+            radial-gradient(62% 36% at 90% 24%, color-mix(in srgb, var(--mut) var(--gk), transparent), transparent 72%),
+            radial-gradient(52% 30% at 102% 50%, color-mix(in srgb, var(--acc2) var(--gk2), transparent), transparent 72%),
+            radial-gradient(44% 22% at 66% 40%, color-mix(in srgb, var(--acc) var(--gk), transparent), transparent 74%),
+            radial-gradient(58% 26% at -2% 90%, color-mix(in srgb, var(--acc2) var(--gk), transparent), transparent 72%),
+            radial-gradient(40% 18% at 30% 98%, color-mix(in srgb, var(--mut) var(--gk), transparent), transparent 74%);
+    }
+    /* Circles / rings stay on the first fixed layer, the glow sits on the second (replaces the old waves and clouds) */
+    body::before { background: var(--art) center / cover no-repeat }
+    body::after { background: var(--glow) center / 100% 100% no-repeat }
+    /* Home page: the opaque cover gets the same glow, repeated down its height (no grain) */
+    .cover::before { background: var(--glow) 0 0 / 100% 1100px repeat-y, var(--veil) }
+    /* No solid box in the footer: the glow shows through */
+    body[data-page="home"] #ft::before { background: transparent }

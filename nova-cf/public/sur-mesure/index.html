@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Commande sur mesure – Objet imprimé en 3D | NOVA 3D</title>
+    <!-- SEO (Google, Facebook, WhatsApp previews). Edit the title/description here. The domain is set by the command "npm run seo" (see DEPLOY.md). -->
+    <meta name="description" content="Décrivez l'objet que vous imaginez, sa taille et sa couleur : NOVA 3D l'imprime en 3D et vous envoie un prix et un délai avant toute impression.">
+    <link rel="canonical" href="https://nova.pieca.workers.dev/sur-mesure/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NOVA 3D">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Commande sur mesure – Objet imprimé en 3D | NOVA 3D">
+    <meta property="og:description" content="Décrivez l'objet que vous imaginez, sa taille et sa couleur : NOVA 3D l'imprime en 3D et vous envoie un prix et un délai avant toute impression.">
+    <meta property="og:url" content="https://nova.pieca.workers.dev/sur-mesure/">
+    <meta property="og:image" content="https://nova.pieca.workers.dev/images/NOVA_3D_logo_transparent.png">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#111111">
+    <link rel="apple-touch-icon" href="/images/icon-180.png">
+    <script src="/js/theme.js"></script>
+</head>
+
+<!-- CUSTOM ORDER PAGE (data-page="custom"). Standard page skeleton shared by all public pages: <body data-page="..."> tells the scripts in /js which page this is; #hd (header) and #ft (footer) are filled by the scripts in /js; <main> holds this page's own content. Styles: /css/styles.css -->
+<body data-page="custom">
+    <div class="wrap">
+        <div id="hd"></div>
+        <main>
+            <section class="rv">
+                <h1 style="font-size:36px">Commande sur mesure</h1>
+                <!-- Form ids: #cn name, #cp phone, #cd description, #sw colour swatches (drawn by custom.js), #cb budget, #send button. custom.js customPage() saves the request (POST /api/custom, admin tab "Sur mesure") and opens a WhatsApp message to the number in public/data/site.json. -->
+                <div class="form">
+                    <p style="margin:0 0 14px;color:var(--mut)">Décrivez l'objet, sa taille et sa couleur. Vous recevez
+                        un prix et un délai avant toute impression.</p>
+                    <label for="cn">Votre nom</label><input id="cn" autocomplete="name">
+                    <label for="cp">Votre téléphone <small>(facultatif)</small></label><input id="cp" type="tel" autocomplete="tel" inputmode="tel">
+                    <!-- Honeypot (anti-bot): invisible to people, bots fill it and the server ignores the request -->
+                    <input id="cw" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+                    <label for="cd">Décrivez votre objet</label><textarea id="cd"
+                        placeholder="ex. Un support de téléphone en forme de chat, 10 cm de haut"></textarea>
+                    <label>Couleur</label>
+                    <div class="sw" id="sw" role="group" aria-label="Couleur"></div>
+                    <label for="cb">Budget en TND (facultatif)</label><input id="cb" inputmode="numeric">
+                    <button class="pill" id="send" style="width:100%">Envoyer ma demande</button>
+                </div>
+            </section>
+        </main>
+        <div id="ft"></div>
+    </div>
+    <script src="/js/core.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/data.js" defer></script>
+    <script src="/js/custom.js" defer></script>
+    <script src="/js/events.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</body>
+
+</html>

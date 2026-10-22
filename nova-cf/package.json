@@ -1,0 +1,23 @@
+{
+  "name": "nova",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate": "node scripts/migrate.mjs",
+    "seo": "node scripts/set-domain.mjs",
+    "test": "node --test test/api.test.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "ci": "npm run typecheck && npm test"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0",
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.15.0"
+  }
+}

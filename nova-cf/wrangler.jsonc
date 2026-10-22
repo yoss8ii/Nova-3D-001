@@ -1,0 +1,39 @@
+// Cloudflare Workers configuration (comments are allowed in .jsonc)
+{
+  "name": "nova",                         // name of the Worker; default URL = nova.<your-subdomain>.workers.dev
+  "main": "src/worker.ts",                // the API entry point (src/worker.ts -> src/app.ts)
+  "compatibility_date": "2025-10-01",
+  "compatibility_flags": ["nodejs_compat"],   // needed by the "pg" driver (Buffer, net...)
+
+  // The website itself = the files of public/. Cloudflare serves them directly (fast, free).
+  // Only /api/* requests wake the Worker.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Connection to your Postgres through Hyperdrive (connection pooling).
+  // >>> Replace "id" with the id printed by:  npx wrangler hyperdrive create ... (see DEPLOY.md) <<<
+  // localConnectionString = database used by `npm run dev` (your PC); may be your Supabase URL.
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "12f7c690b59643c88e67461b8fecd5d2",
+      "localConnectionString": "postgres://postgres:postgres@localhost:5432/nova3d"
+    }
+  ],
+
+  // Plain (non-secret) settings. Secrets (ADMIN_PASSWORD, GMAIL_SCRIPT_URL, GMAIL_SCRIPT_SECRET, BREVO_API_KEY, RESEND_API_KEY, MAIL_FROM, OWNER_EMAIL) are NOT written
+  // here: use `npx wrangler secret put NAME`.
+  // >>> ORDERS_ENABLED = "true": online orders + confirmation e-mail with the invoice (PDF) are ACTIVE.
+  // >>> E-mail: easiest = your Gmail (scripts/gmail-sender.gs, free): set GMAIL_SCRIPT_URL + GMAIL_SCRIPT_SECRET. Or BREVO_API_KEY / RESEND_API_KEY + MAIL_FROM. See DEPLOY.md <<<
+  // TIMEZONE = shop time zone, used by the admin dashboard to cut days and months (IANA name).
+  // OWNER_EMAIL (secret or var, optional) = address that receives a "Nouvelle commande" e-mail with the invoice:
+  //   npx wrangler secret put OWNER_EMAIL
+  "vars": {
+    "ORDERS_ENABLED": "true",
+    "TIMEZONE": "Africa/Tunis",
+		"OWNER_EMAIL": "nova.3d.com.tn@gmail.com"
+  }
+}

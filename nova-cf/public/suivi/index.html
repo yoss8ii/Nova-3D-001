@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Suivi de commande – NOVA 3D</title>
+    <!-- SEO (Google, Facebook, WhatsApp previews). This page is kept out of search results. The domain is set by `npm run seo -- https://yourdomain.com`. -->
+    <meta name="description" content="Suivez votre commande NOVA 3D avec votre numéro de facture et votre téléphone.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#111111">
+    <link rel="apple-touch-icon" href="/images/icon-180.png">
+    <script src="/js/theme.js"></script>
+</head>
+
+<!-- TRACKING PAGE (data-page="track"). Same skeleton as the other pages. #tf form: #tn invoice number, #tp phone, #tb button, #tm message, #tr result. Filled by /js/track.js (POST /api/track). -->
+<body data-page="track">
+    <div class="wrap">
+        <div id="hd"></div>
+        <main>
+            <section>
+                <h1 style="font-size:36px">Suivi de commande</h1>
+                <form id="tf" class="form" style="max-width:520px" novalidate>
+                    <p style="margin:0 0 14px;color:var(--mut)">Entrez le numéro de votre facture et le téléphone utilisé pour la commande.</p>
+                    <label for="tn">Numéro de facture</label><input id="tn" placeholder="NOVA-20261020-123456" autocomplete="off" autocapitalize="characters">
+                    <label for="tp">Téléphone</label><input id="tp" type="tel" autocomplete="tel" inputmode="tel">
+                    <button class="pill" id="tb" style="width:100%">Suivre ma commande</button>
+                    <div class="note" id="tm" role="alert"></div>
+                </form>
+                <div id="tr" aria-live="polite"></div>
+            </section>
+        </main>
+        <div id="ft"></div>
+    </div>
+    <script src="/js/core.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/data.js" defer></script>
+    <script src="/js/track.js" defer></script>
+    <script src="/js/events.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</body>
+
+</html>

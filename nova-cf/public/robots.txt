@@ -1,0 +1,8 @@
+# robots.txt - tells search engines what they may visit.
+# Everything public is allowed. The admin page is NOT listed here on purpose (that would reveal
+# its secret address); it is kept out of Google by "noindex" (meta tag + X-Robots-Tag header).
+User-agent: *
+Allow: /
+
+# Replace the domain with the command: npm run seo -- https://yourdomain.com
+Sitemap: https://nova.pieca.workers.dev/sitemap.xml

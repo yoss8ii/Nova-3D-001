@@ -1,0 +1,20 @@
+# _headers: HTTP headers added by Cloudflare to the static files (replaces the old netlify.toml block).
+
+# Admin page: never cache it, never index it
+/gestion-nova-k7q2x9/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+# Basic security headers for every page
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: DENY
+  # CSP below: only our own scripts, Google Fonts, our own images (+ data:/blob: for photo previews).
+  # Inline styles are allowed (the pages use style="..."), inline SCRIPTS are not. Facebook/Instagram/WhatsApp are plain links.
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+# Service worker: always re-checked, so a new version is picked up at the next visit
+/sw.js
+  Cache-Control: no-cache

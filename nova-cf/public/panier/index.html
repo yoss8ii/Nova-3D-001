@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Panier – NOVA 3D</title>
+    <!-- SEO (Google, Facebook, WhatsApp previews). This page is kept out of search results. The domain is set by `npm run seo -- https://yourdomain.com`. -->
+    <meta name="description" content="Votre panier NOVA 3D.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="/images/nova3d-favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#111111">
+    <link rel="apple-touch-icon" href="/images/icon-180.png">
+    <script src="/js/theme.js"></script>
+</head>
+
+<!-- CART PAGE (data-page="cart"). Standard page skeleton shared by all public pages: <body data-page="..."> tells the scripts in /js which page this is; #hd (header) and #ft (footer) are filled by the scripts in /js; <main> holds this page's own content. Styles: /css/styles.css -->
+<body data-page="cart">
+    <div class="wrap">
+        <div id="hd"></div>
+        <main>
+            <section>
+                <h1 style="font-size:36px">Mon panier</h1>
+                <!-- #cp is filled by the scripts in /js cartPage(): the cart lines + the customer form, or the "panier vide" message. The cart itself lives in the browser (localStorage "n3d_cart"). Submit -> POST /api/order. -->
+                <div id="cp"></div>
+            </section>
+        </main>
+        <div id="ft"></div>
+    </div>
+    <script src="/js/core.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/data.js" defer></script>
+    <script src="/js/toast.js" defer></script>
+    <script src="/js/cart.js" defer></script>
+    <script src="/js/events.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</body>
+
+</html>
