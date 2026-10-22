@@ -4,6 +4,12 @@
  * Texts go in with textContent (never innerHTML); the links were checked by the server (instagram.com address, digits-only WhatsApp number). */
 (function () {
     function $(id) { return document.getElementById(id) }
+    // Light / dark switch (toggleTheme() comes from /js/theme.js and remembers the choice for the whole site)
+    $("sTheme").addEventListener("click", function () {
+        var d = document.documentElement; d.classList.add("sw");
+        if (window.toggleTheme) toggleTheme();
+        setTimeout(function () { d.classList.remove("sw") }, 600)
+    });
     fetch("/api/coming-soon", { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json() }).then(function (c) {
         if (c.titleFr) $("sTitleFr").textContent = c.titleFr;
         if (c.textFr) $("sTextFr").textContent = c.textFr;
