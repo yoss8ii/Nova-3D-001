@@ -108,6 +108,26 @@ body {
 .btn:focus-visible { outline: 3px solid var(--acc); outline-offset: 3px }
 .btn.hide { display: none }
 
+/* Theme switch (top right): moon while the page is light, sun while it is dark */
+.tg {
+    position: fixed; z-index: 2; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right));
+    width: 44px; height: 44px; display: grid; place-items: center; padding: 0; cursor: pointer;
+    border-radius: 50%; border: 1.5px solid var(--line); background: var(--glass); color: var(--ink);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform .2s, border-color .2s
+}
+.tg:hover { transform: rotate(18deg) scale(1.06); border-color: var(--ink) }
+.tg:focus-visible { outline: 3px solid var(--acc); outline-offset: 3px }
+.tg svg { width: 22px; height: 22px }
+.tg .i-sun { display: none }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .tg .i-sun { display: block }
+    :root:not([data-theme="light"]) .tg .i-moon { display: none }
+}
+:root[data-theme="dark"] .tg .i-sun { display: block }
+:root[data-theme="dark"] .tg .i-moon { display: none }
+/* soft cross-fade of the colours when the theme changes */
+html.sw, html.sw body, html.sw .btn, html.sw .tg { transition: background-color .4s, color .4s, border-color .4s }
+
 /* ---- Phone ------------------------------------------------------------------------------------------------------- */
 @media (max-width: 520px) {
     .stage { padding-left: 20px; padding-right: 20px }
